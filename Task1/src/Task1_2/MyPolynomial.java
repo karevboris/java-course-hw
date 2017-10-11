@@ -24,8 +24,8 @@ public class MyPolynomial {
 
     @Override
     public String toString() {
-        String res=null;
-        for (int i=coeffs.length; i>0; i--){
+        String res="";
+        for (int i=getDegree(); i>0; i--){
             res+="("+coeffs[i]+")*x^"+i+"+";
         }
         res+=coeffs[0];
@@ -34,16 +34,25 @@ public class MyPolynomial {
 
     public double evaluate(double x){
         double res = 0;
-        for (int i=0; i<=coeffs.length; i++){
+        for (int i=0; i<=getDegree(); i++){
             res+=coeffs[i]*Math.pow(x, i);
         }
         return res;
     }
 
     public MyPolynomial add(MyPolynomial mp){
-        double [] c = coeffs.clone();
-        for (int i=0; i<=coeffs.length; i++){
-            c[i]+=mp.getCoeffs()[i];
+        double [] c;
+        if (getDegree()>mp.getDegree()) {
+            c=coeffs.clone();
+            for (int i = 0; i <= mp.getDegree(); i++) {
+                c[i] += mp.getCoeffs()[i];
+            }
+        }
+        else {
+            c = mp.getCoeffs().clone();
+            for (int i = 0; i <= getDegree(); i++) {
+                c[i] += coeffs[i];
+            }
         }
         MyPolynomial res = new MyPolynomial(c);
         return res;

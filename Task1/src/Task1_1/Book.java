@@ -62,7 +62,7 @@ public class Book {
     }
 
     public String getAuthorNames(){
-        String res=null;
+        String res="";
         for (Author i: authors) {
             res+=i.getName() + ", ";
         }
