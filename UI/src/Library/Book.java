@@ -1,3 +1,5 @@
+package Library;
+
 /**
  * Created by Boris on 05.11.2017.
  */
@@ -46,7 +48,7 @@ public class Book {
 
     @Override
     public String toString() {
-        return "Book{" +
+        return "Library.Book{" +
                 "name='" + name + '\'' +
                 ", author=" + author +
                 ", price=" + price +

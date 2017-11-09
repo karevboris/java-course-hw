@@ -1,3 +1,5 @@
+package Library;
+
 import java.util.Objects;
 
 /**
@@ -28,7 +30,7 @@ public class Author {
 
     @Override
     public String toString() {
-        return "Author{" +
+        return "Library.Author{" +
                 "name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", gender='" + gender + '\'' +
