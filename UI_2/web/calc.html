@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Calculator</title>
+    <link rel="stylesheet" type="text/css" href="Style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+<h1>Решение квадратного уравнения</h1>
+<p><i>Сервис решает уравнение вида A*x^2+B*x+C=0. Результат записывается в таблицу. Для подсчёта необходимо корректно ввести коэффициенты уравнения и нажать кнопку.</i></p>
+<form>
+    <input id="coefA" oninput="validateComponents()" class="inputText" type="text" name="coefA" autofocus required value="0"> * x<sup>2</sup> +
+    <input id="coefB" oninput="validateComponents()" class="inputText" type="text" name="coefB" autofocus required value="0"> * x +
+    <input id="coefC" oninput="validateComponents()" class="inputText" type="text" name="coefC" autofocus required value="0"> = 0
+</form>
+
+<input class="button" onclick="ajaxFunction()" id = "sub" type="submit" value="Calculate" name="sub"/>
+
+<table id="Table" cellspacing="0" border="1">
+    <thead>
+    <tr align="center">
+        <td>Coeff A</td>
+        <td>Coeff B</td>
+        <td>Coeff C</td>
+        <td>x1</td>
+        <td>x2</td>
+    </tr>
+    </thead>
+    <tbody id="Row">
+    </tbody>
+</table>
+</body>
+</html>

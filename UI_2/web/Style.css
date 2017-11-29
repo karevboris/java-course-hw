@@ -1,0 +1,53 @@
+H1 {
+    color: #000080;
+    font-size: 200%;
+    font-family: Arial, Verdana, sans-serif;
+    text-align: center;
+    font-style: italic;
+    margin-top: 10%;
+}
+P {
+    padding-left: 30%;
+    padding-right: 30%;
+    text-align:justify;
+    font-size: 125%;
+}
+.inputText {
+    background-color: #eeeeee;
+    width: 30px;
+    height: 30px;
+}
+FORM {
+    color: darkblue;
+    font-style: italic;
+    font-weight:bold;
+    text-align: center;
+    font-size: 125%;
+}
+
+table{
+    margin: auto;
+    margin-top: 20px;
+}
+
+tbody tr:nth-child(odd){
+    text-align: center;
+    background: skyblue;
+}
+
+tbody tr:nth-child(even){
+    text-align: center;
+    background: papayawhip;
+}
+body{
+    background:url(bgcolor.jpg);
+    background-size: 100%
+}
+
+.button{
+    display:block;
+    position: relative;
+    border: 1px solid darkblue;
+    margin:0 auto;
+    margin-top: 10px;
+}
