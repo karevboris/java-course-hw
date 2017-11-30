@@ -1,4 +1,4 @@
-H1 {
+.caption {
     color: #000080;
     font-size: 200%;
     font-family: Arial, Verdana, sans-serif;
@@ -6,18 +6,19 @@ H1 {
     font-style: italic;
     margin-top: 10%;
 }
-P {
+.text {
     padding-left: 30%;
     padding-right: 30%;
     text-align:justify;
     font-size: 125%;
+    font-style: italic;
 }
 .inputText {
     background-color: #eeeeee;
     width: 30px;
     height: 30px;
 }
-FORM {
+.form_calc {
     color: darkblue;
     font-style: italic;
     font-weight:bold;
@@ -25,21 +26,22 @@ FORM {
     font-size: 125%;
 }
 
-table{
+.table_res{
     margin: auto;
     margin-top: 20px;
 }
 
-tbody tr:nth-child(odd){
+.row_odd tr:nth-child(odd){
     text-align: center;
     background: skyblue;
 }
 
-tbody tr:nth-child(even){
+.row_even tr:nth-child(even){
     text-align: center;
     background: papayawhip;
 }
-body{
+
+.bgcolor{
     background:url(bgcolor.jpg);
     background-size: 100%
 }

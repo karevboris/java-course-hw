@@ -1,7 +1,19 @@
+var ajaxRequest;
+var coefA;
+var coefB;
+var coefC;
+
+function init() {
+    coefA = document.getElementById("coefA");
+    coefB = document.getElementById("coefB");
+    coefC = document.getElementById("coefC");
+
+    var el = document.getElementById("Row");
+    el.addEventListener("click", function(event){deleteRow(event);}, false);
+}
+
 function validateComponents() {
-    var coefA = document.getElementById("coefA");
-    var coefB = document.getElementById("coefB");
-    var coefC = document.getElementById("coefC");
+
     var pattern = /^-?\d+([\.,]\d+)?$/;
     var flag = false;
 
@@ -28,15 +40,32 @@ function validateComponents() {
     document.getElementById("sub").disabled = flag;
 }
 
-var d = document;
+function deleteRow(event) {
+    event.target.parentNode.parentNode.removeChild(event.target.parentNode);
+}
+
+function addCell(row, value) {
+    var newCell = row.insertCell();
+    var newText = document.createTextNode(value);
+    newCell.appendChild(newText);
+}
+
+function addRow(msg) {
+    var json = JSON.parse(msg);
+    var tableRef = document.getElementById("Row");
+    var newRow = tableRef.insertRow(0);
+
+    addCell(newRow, coefA.value);
+    addCell(newRow, coefB.value);
+    addCell(newRow, coefC.value);
+    addCell(newRow, json.x1);
+    addCell(newRow, json.x2);
+}
 
 function ajaxFunction() {
 
-    var coefA = document.getElementById("coefA").value;
-    var coefB = document.getElementById("coefB").value;
-    var coefC = document.getElementById("coefC").value;
+    var msg = "?coefA="+coefA.value+"&coefB="+coefB.value+"&coefC="+coefC.value;
 
-    var ajaxRequest;
     try {
         ajaxRequest = new XMLHttpRequest();
     } catch (e) {
@@ -52,45 +81,18 @@ function ajaxFunction() {
         }
     }
 
-    ajaxRequest.onreadystatechange = function () {
-        if (ajaxRequest.readyState == 4) {
-            if (ajaxRequest.status == 200) {
-
-                var json = JSON.parse(ajaxRequest.responseText);
-                var tableRef = document.getElementById("Row");
-                var newRow = tableRef.insertRow(0);
-                newRow.onclick = function () {
-                    newRow.parentNode.removeChild(newRow);
-                };
-
-                var newCell = newRow.insertCell();
-                var newText = document.createTextNode(coefA);
-                newCell.appendChild(newText);
-
-                newCell = newRow.insertCell();
-                newText = document.createTextNode(coefB);
-                newCell.appendChild(newText);
-
-                newCell = newRow.insertCell();
-                newText = document.createTextNode(coefC);
-                newCell.appendChild(newText);
-
-
-                newCell = newRow.insertCell();
-                newText = document.createTextNode(json.x1);
-                newCell.appendChild(newText);
-
-                newCell = newRow.insertCell();
-                newText = document.createTextNode(json.x2);
-                newCell.appendChild(newText);
-            }
-            else {
-                alert("WARNING: " + ajaxRequest.status);
-            }
-        }
-    };
-
-    var msg = "?coefA="+coefA+"&coefB="+coefB+"&coefC="+coefC;
+    ajaxRequest.onreadystatechange = processRequest;
     ajaxRequest.open('GET', 'http://localhost:8080/myServlet'+msg, true);
     ajaxRequest.send(null);
+}
+
+function processRequest() {
+    if (ajaxRequest.readyState == 4) {
+        if (ajaxRequest.status == 200) {
+            addRow(ajaxRequest.responseText)
+        }
+        else {
+            alert("WARNING: " + ajaxRequest.status);
+        }
+    }
 }
