@@ -44,22 +44,24 @@ function deleteRow(event) {
     event.target.parentNode.parentNode.removeChild(event.target.parentNode);
 }
 
-function addCell(row, value) {
-    var newCell = row.insertCell();
-    var newText = document.createTextNode(value);
-    newCell.appendChild(newText);
+function Table(name) {
+    this.name=name;
+    this.addRow=function (row) {
+        var newRow = this.name.insertRow(0);
+        newRow.insertCell().appendChild(row.cfA);
+        newRow.insertCell().appendChild(row.cfB);
+        newRow.insertCell().appendChild(row.cfC);
+        newRow.insertCell().appendChild(row.x1);
+        newRow.insertCell().appendChild(row.x2);
+    };
 }
 
-function addRow(msg) {
-    var json = JSON.parse(msg);
-    var tableRef = document.getElementById("Row");
-    var newRow = tableRef.insertRow(0);
-
-    addCell(newRow, coefA.value);
-    addCell(newRow, coefB.value);
-    addCell(newRow, coefC.value);
-    addCell(newRow, json.x1);
-    addCell(newRow, json.x2);
+function Row(x1, x2) {
+    this.cfA=document.createTextNode(coefA.value);
+    this.cfB=document.createTextNode(coefB.value);
+    this.cfC=document.createTextNode(coefC.value);
+    this.x1=document.createTextNode(x1);
+    this.x2=document.createTextNode(x2);
 }
 
 function ajaxFunction() {
@@ -82,14 +84,17 @@ function ajaxFunction() {
     }
 
     ajaxRequest.onreadystatechange = processRequest;
-    ajaxRequest.open('GET', 'http://localhost:8080/myServlet'+msg, true);
+    ajaxRequest.open('GET', '/myServlet'+msg, true);
     ajaxRequest.send(null);
 }
 
 function processRequest() {
     if (ajaxRequest.readyState == 4) {
         if (ajaxRequest.status == 200) {
-            addRow(ajaxRequest.responseText)
+            var json = JSON.parse(ajaxRequest.responseText);
+            var table = new Table(document.getElementById("Row"));
+            var newRow = new Row(json.x1, json.x2);
+            table.addRow(newRow);
         }
         else {
             alert("WARNING: " + ajaxRequest.status);
