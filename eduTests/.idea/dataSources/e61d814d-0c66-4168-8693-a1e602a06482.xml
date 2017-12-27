@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="hibernate.cfg.xml/Hibernate">
+  <database-model serializer="dbm" rdbms="POSTGRES" format-version="4.4">
+    <root id="1"/>
+    <database id="2" parent="1" name="eduTest">
+      <ObjectId>16396</ObjectId>
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </database>
+    <database id="3" parent="1" name="postgres">
+      <ObjectId>12029</ObjectId>
+    </database>
+    <schema id="4" parent="2" name="public">
+      <ObjectId>2200</ObjectId>
+      <IntrospectionTimestamp>2017-12-12.22:38:23.242</IntrospectionTimestamp>
+      <IntrospectionStateNumber>850</IntrospectionStateNumber>
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="5" parent="2" name="pg_catalog">
+      <ObjectId>11</ObjectId>
+    </schema>
+    <schema id="6" parent="2" name="pg_toast">
+      <ObjectId>99</ObjectId>
+    </schema>
+    <schema id="7" parent="2" name="pg_temp_1">
+      <ObjectId>11215</ObjectId>
+    </schema>
+    <schema id="8" parent="2" name="pg_toast_temp_1">
+      <ObjectId>11216</ObjectId>
+    </schema>
+    <schema id="9" parent="2" name="information_schema">
+      <ObjectId>11480</ObjectId>
+    </schema>
+    <sequence id="10" parent="4" name="hibernate_sequence">
+      <ObjectId>16564</ObjectId>
+      <StateNumber>833</StateNumber>
+      <SequenceIdentity>1</SequenceIdentity>
+    </sequence>
+    <table id="11" parent="4" name="answers">
+      <ObjectId>16397</ObjectId>
+      <StateNumber>776</StateNumber>
+    </table>
+    <table id="12" parent="4" name="detail_test">
+      <ObjectId>24576</ObjectId>
+      <StateNumber>846</StateNumber>
+    </table>
+    <table id="13" parent="4" name="quest_answers">
+      <ObjectId>16448</ObjectId>
+      <StateNumber>751</StateNumber>
+    </table>
+    <table id="14" parent="4" name="questions">
+      <ObjectId>16402</ObjectId>
+      <StateNumber>800</StateNumber>
+    </table>
+    <table id="15" parent="4" name="test_quest">
+      <ObjectId>16516</ObjectId>
+      <StateNumber>802</StateNumber>
+    </table>
+    <table id="16" parent="4" name="tests">
+      <ObjectId>16407</ObjectId>
+      <StateNumber>802</StateNumber>
+    </table>
+    <table id="17" parent="4" name="user_tests">
+      <ObjectId>16531</ObjectId>
+      <StateNumber>847</StateNumber>
+    </table>
+    <table id="18" parent="4" name="users">
+      <ObjectId>16484</ObjectId>
+      <StateNumber>796</StateNumber>
+    </table>
+    <column id="19" parent="11" name="answer_id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>685</StateNumber>
+    </column>
+    <column id="20" parent="11" name="text">
+      <Position>2</Position>
+      <DataType>char(500)|0</DataType>
+      <StateNumber>702</StateNumber>
+    </column>
+    <index id="21" parent="11" name="answer_key">
+      <ObjectId>16400</ObjectId>
+      <ColNames>answer_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="22" parent="11" name="answer_key">
+      <ObjectId>16401</ObjectId>
+      <ColNames>answer_id</ColNames>
+      <UnderlyingIndexName>answer_key</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <column id="23" parent="12" name="user_test_id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>849</StateNumber>
+    </column>
+    <column id="24" parent="12" name="count_passed">
+      <Position>2</Position>
+      <DataType>integer|0</DataType>
+      <StateNumber>846</StateNumber>
+    </column>
+    <column id="25" parent="12" name="count_failed">
+      <Position>3</Position>
+      <DataType>integer|0</DataType>
+      <StateNumber>846</StateNumber>
+    </column>
+    <column id="26" parent="12" name="result">
+      <Position>4</Position>
+      <DataType>double precision|0</DataType>
+      <StateNumber>846</StateNumber>
+    </column>
+    <index id="27" parent="12" name="detail_key">
+      <ObjectId>24579</ObjectId>
+      <ColNames>user_test_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="28" parent="12" name="detail_key">
+      <ObjectId>24580</ObjectId>
+      <ColNames>user_test_id</ColNames>
+      <UnderlyingIndexName>detail_key</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <column id="29" parent="13" name="quest_id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>745</StateNumber>
+    </column>
+    <column id="30" parent="13" name="answer_id">
+      <Position>2</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>745</StateNumber>
+    </column>
+    <column id="31" parent="13" name="iscorrect">
+      <Position>3</Position>
+      <DataType>boolean|0</DataType>
+      <StateNumber>744</StateNumber>
+    </column>
+    <index id="32" parent="13" name="quest_answers_key">
+      <ObjectId>16451</ObjectId>
+      <ColNames>quest_id
+answer_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="33" parent="13" name="fki_answer_fkey">
+      <ObjectId>16463</ObjectId>
+      <ColNames>answer_id</ColNames>
+    </index>
+    <key id="34" parent="13" name="quest_answers_key">
+      <ObjectId>16452</ObjectId>
+      <ColNames>quest_id
+answer_id</ColNames>
+      <UnderlyingIndexName>quest_answers_key</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="35" parent="13" name="answer_quest_fkey">
+      <ObjectId>16469</ObjectId>
+      <ColNames>quest_id</ColNames>
+      <RefTableId>16402</RefTableId>
+      <RefColPositions>1</RefColPositions>
+      <RefTableName>questions</RefTableName>
+      <RefKeyName>quest_key</RefKeyName>
+      <RefColNames>quest_id</RefColNames>
+      <OnDelete>restrict</OnDelete>
+      <OnUpdate>cascade</OnUpdate>
+    </foreign-key>
+    <foreign-key id="36" parent="13" name="answers_fkey">
+      <ObjectId>16464</ObjectId>
+      <ColNames>answer_id</ColNames>
+      <RefTableId>16397</RefTableId>
+      <RefColPositions>1</RefColPositions>
+      <RefTableName>answers</RefTableName>
+      <RefKeyName>answer_key</RefKeyName>
+      <RefColNames>answer_id</RefColNames>
+      <OnDelete>restrict</OnDelete>
+      <OnUpdate>cascade</OnUpdate>
+    </foreign-key>
+    <column id="37" parent="14" name="quest_id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>689</StateNumber>
+    </column>
+    <column id="38" parent="14" name="text">
+      <Position>2</Position>
+      <DataType>char(500)|0</DataType>
+      <StateNumber>790</StateNumber>
+    </column>
+    <column id="39" parent="14" name="time">
+      <Position>4</Position>
+      <DataType>integer|0</DataType>
+      <StateNumber>785</StateNumber>
+    </column>
+    <column id="40" parent="14" name="points">
+      <Position>5</Position>
+      <DataType>double precision|0</DataType>
+      <StateNumber>786</StateNumber>
+    </column>
+    <column id="41" parent="14" name="user_id">
+      <Position>6</Position>
+      <DataType>integer|0</DataType>
+      <StateNumber>787</StateNumber>
+    </column>
+    <index id="42" parent="14" name="quest_key">
+      <ObjectId>16405</ObjectId>
+      <ColNames>quest_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="43" parent="14" name="fki_quest_user_fkey">
+      <ObjectId>16505</ObjectId>
+      <ColNames>user_id</ColNames>
+    </index>
+    <key id="44" parent="14" name="quest_key">
+      <ObjectId>16406</ObjectId>
+      <ColNames>quest_id</ColNames>
+      <UnderlyingIndexName>quest_key</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="45" parent="14" name="quest_user_fkey">
+      <ObjectId>16500</ObjectId>
+      <ColNames>user_id</ColNames>
+      <RefTableId>16484</RefTableId>
+      <RefColPositions>1</RefColPositions>
+      <RefTableName>users</RefTableName>
+      <RefKeyName>user_key</RefKeyName>
+      <RefColNames>user_id</RefColNames>
+    </foreign-key>
+    <column id="46" parent="15" name="test_id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>795</StateNumber>
+    </column>
+    <column id="47" parent="15" name="quest_id">
+      <Position>2</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>795</StateNumber>
+    </column>
+    <index id="48" parent="15" name="test_quest_key">
+      <ObjectId>16519</ObjectId>
+      <ColNames>test_id
+quest_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="49" parent="15" name="fki_quest_fkey">
+      <ObjectId>16551</ObjectId>
+      <ColNames>quest_id</ColNames>
+    </index>
+    <key id="50" parent="15" name="test_quest_key">
+      <ObjectId>16520</ObjectId>
+      <ColNames>test_id
+quest_id</ColNames>
+      <UnderlyingIndexName>test_quest_key</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="51" parent="15" name="test_quest_fkey">
+      <ObjectId>16552</ObjectId>
+      <ColNames>test_id</ColNames>
+      <RefTableId>16407</RefTableId>
+      <RefColPositions>1</RefColPositions>
+      <RefTableName>tests</RefTableName>
+      <RefKeyName>test_key</RefKeyName>
+      <RefColNames>test_id</RefColNames>
+      <OnDelete>restrict</OnDelete>
+      <OnUpdate>cascade</OnUpdate>
+    </foreign-key>
+    <foreign-key id="52" parent="15" name="quest_fkey">
+      <ObjectId>16546</ObjectId>
+      <ColNames>quest_id</ColNames>
+      <RefTableId>16402</RefTableId>
+      <RefColPositions>1</RefColPositions>
+      <RefTableName>questions</RefTableName>
+      <RefKeyName>quest_key</RefKeyName>
+      <RefColNames>quest_id</RefColNames>
+      <OnDelete>restrict</OnDelete>
+      <OnUpdate>cascade</OnUpdate>
+    </foreign-key>
+    <column id="53" parent="16" name="test_id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>693</StateNumber>
+    </column>
+    <column id="54" parent="16" name="name">
+      <Position>2</Position>
+      <DataType>char(100)|0</DataType>
+      <StateNumber>792</StateNumber>
+    </column>
+    <column id="55" parent="16" name="user_id">
+      <Position>4</Position>
+      <DataType>integer|0</DataType>
+      <StateNumber>793</StateNumber>
+    </column>
+    <index id="56" parent="16" name="test_key">
+      <ObjectId>16410</ObjectId>
+      <ColNames>test_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="57" parent="16" name="fki_test_user_fkey">
+      <ObjectId>16515</ObjectId>
+      <ColNames>user_id</ColNames>
+    </index>
+    <key id="58" parent="16" name="test_key">
+      <ObjectId>16411</ObjectId>
+      <ColNames>test_id</ColNames>
+      <UnderlyingIndexName>test_key</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="59" parent="16" name="test_user_fkey">
+      <ObjectId>16510</ObjectId>
+      <ColNames>user_id</ColNames>
+      <RefTableId>16484</RefTableId>
+      <RefColPositions>1</RefColPositions>
+      <RefTableName>users</RefTableName>
+      <RefKeyName>user_key</RefKeyName>
+      <RefColNames>user_id</RefColNames>
+    </foreign-key>
+    <column id="60" parent="17" name="user_id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>796</StateNumber>
+    </column>
+    <column id="61" parent="17" name="test_id">
+      <Position>2</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>796</StateNumber>
+    </column>
+    <column id="62" parent="17" name="user_test_id">
+      <Position>5</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>850</StateNumber>
+    </column>
+    <index id="63" parent="17" name="user_test_key">
+      <ObjectId>24581</ObjectId>
+      <ColNames>user_test_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="64" parent="17" name="user_test_key">
+      <ObjectId>24582</ObjectId>
+      <ColNames>user_test_id</ColNames>
+      <UnderlyingIndexName>user_test_key</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="65" parent="17" name="user_fkey">
+      <ObjectId>16536</ObjectId>
+      <ColNames>user_id</ColNames>
+      <RefTableId>16484</RefTableId>
+      <RefColPositions>1</RefColPositions>
+      <RefTableName>users</RefTableName>
+      <RefKeyName>user_key</RefKeyName>
+      <RefColNames>user_id</RefColNames>
+      <OnDelete>restrict</OnDelete>
+      <OnUpdate>cascade</OnUpdate>
+    </foreign-key>
+    <foreign-key id="66" parent="17" name="test_fkey">
+      <ObjectId>16541</ObjectId>
+      <ColNames>test_id</ColNames>
+      <RefTableId>16407</RefTableId>
+      <RefColPositions>1</RefColPositions>
+      <RefTableName>tests</RefTableName>
+      <RefKeyName>test_key</RefKeyName>
+      <RefColNames>test_id</RefColNames>
+      <OnDelete>restrict</OnDelete>
+      <OnUpdate>cascade</OnUpdate>
+    </foreign-key>
+    <column id="67" parent="18" name="user_id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>788</StateNumber>
+    </column>
+    <column id="68" parent="18" name="password">
+      <Position>2</Position>
+      <DataType>char(100)|0</DataType>
+      <StateNumber>788</StateNumber>
+    </column>
+    <column id="69" parent="18" name="isadmin">
+      <Position>3</Position>
+      <DataType>boolean|0</DataType>
+      <StateNumber>788</StateNumber>
+    </column>
+    <column id="70" parent="18" name="login">
+      <Position>4</Position>
+      <DataType>char(100)|0</DataType>
+      <StateNumber>788</StateNumber>
+    </column>
+    <index id="71" parent="18" name="user_key">
+      <ObjectId>16487</ObjectId>
+      <ColNames>user_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="72" parent="18" name="user_key">
+      <ObjectId>16488</ObjectId>
+      <ColNames>user_id</ColNames>
+      <UnderlyingIndexName>user_key</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+  </database-model>
+</dataSource>
