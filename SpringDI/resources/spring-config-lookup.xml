@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd ">
+
+    <bean id="Operations" class="com.netcracker.TestClasses.Operations">
+        <lookup-method name="buy" bean="Buyer"/>
+        <lookup-method name="buyVip" bean="newBuyer"/>
+    </bean>
+
+    <bean id="Buyer" class="com.netcracker.TestClasses.Buyer" scope="prototype"/>
+    <bean id="newBuyer" class="com.netcracker.TestClasses.Buyer" scope="prototype">
+        <property name="vip" value="true"/>
+    </bean>
+</beans>
