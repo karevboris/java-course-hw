@@ -1,0 +1,7 @@
+com\netcracker\Service\AnswerService\AnswerRESTService.class
+com\netcracker\Entities\Answer.class
+com\netcracker\Service\AnswerService\AnswerServiceImpl.class
+com\netcracker\DAO\AbstractDAO.class
+com\netcracker\DAO\AnswerDAO\AnswerDAOImpl.class
+com\netcracker\Service\AnswerService\AnswerService.class
+com\netcracker\DAO\AnswerDAO\AnswerDAO.class

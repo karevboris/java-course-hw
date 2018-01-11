@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="projectNetcracker:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="REST.war">
+      <element id="artifact" artifact-name="projectNetcracker:war exploded" />
+    </root>
+  </artifact>
+</component>
