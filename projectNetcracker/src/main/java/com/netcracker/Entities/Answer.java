@@ -3,11 +3,12 @@ package com.netcracker.Entities;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "answers")
 @EnableTransactionManagement
-public class Answer {
+public class Answer implements Serializable {
     @Id
     @Column(name = "answer_id")
     @GeneratedValue(strategy = GenerationType.AUTO)

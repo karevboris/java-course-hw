@@ -14,9 +14,213 @@
 
     <mvc:annotation-driven/>
 
+    <!--UserTest beans-->
+
+    <bean id="userTestServiceImpl" class="com.netcracker.Service.UserTestService.UserTestServiceImpl"/>
+
+    <bean id="userTestDAOImpl" class="com.netcracker.DAO.UserTestDAO.UserTestDAOImpl"/>
+
+    <bean name="userTestRest" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">
+        <property name="service" ref="userTestService"></property>
+        <property name="serviceInterface" value="com.netcracker.Service.UserTestService.UserTestService"></property>
+    </bean>
+
+    <bean id="urlMappingUserTest" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <props>
+                <prop key="/dispatcherUserTest.service">userTestRest</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="userTestService" class="com.netcracker.Service.UserTestService.UserTestServiceImpl">
+        <property name="dao" ref="userTestDAOImpl"/>
+    </bean>
+
+    <bean id="userTestRESTService" class="com.netcracker.Service.UserTestService.UserTestRESTService">
+        <property name="userTestService" ref="userTestServiceImpl"/>
+    </bean>
+
+    <!--TestQuest beans-->
+
+    <bean id="testQuestServiceImpl" class="com.netcracker.Service.TestQuestService.TestQuestServiceImpl"/>
+
+    <bean id="testQuestDAOImpl" class="com.netcracker.DAO.TestQuestDAO.TestQuestDAOImpl"/>
+
+    <bean name="testQuestRest" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">
+        <property name="service" ref="testQuestService"></property>
+        <property name="serviceInterface" value="com.netcracker.Service.TestQuestService.TestQuestService"></property>
+    </bean>
+
+    <bean id="urlMappingTestQuest" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <props>
+                <prop key="/dispatcherTestQuest.service">testQuestRest</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="testQuestService" class="com.netcracker.Service.TestQuestService.TestQuestServiceImpl">
+        <property name="dao" ref="testQuestDAOImpl"/>
+    </bean>
+
+    <bean id="testQuestRESTService" class="com.netcracker.Service.TestQuestService.TestQuestRESTService">
+        <property name="testQuestService" ref="testQuestServiceImpl"/>
+    </bean>
+
+    <!--QuestAnswer beans-->
+
+    <bean id="questAnswerServiceImpl" class="com.netcracker.Service.QuestAnswerService.QuestAnswerServiceImpl"/>
+
+    <bean id="questAnswerDAOImpl" class="com.netcracker.DAO.QuestAnswerDAO.QuestAnswerDAOImpl"/>
+
+    <bean name="questAnswerRest" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">
+        <property name="service" ref="questAnswerService"></property>
+        <property name="serviceInterface" value="com.netcracker.Service.QuestAnswerService.QuestAnswerService"></property>
+    </bean>
+
+    <bean id="urlMappingQuestAnswer" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <props>
+                <prop key="/dispatcherQuestAnswer.service">questAnswerRest</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="questAnswerService" class="com.netcracker.Service.QuestAnswerService.QuestAnswerServiceImpl">
+        <property name="dao" ref="questAnswerDAOImpl"/>
+    </bean>
+
+    <bean id="questAnswerRESTService" class="com.netcracker.Service.QuestAnswerService.QuestAnswerRESTService">
+        <property name="questAnswerService" ref="questAnswerServiceImpl"/>
+    </bean>
+
+    <!--DetailTest beans-->
+
+    <bean id="detailTestServiceImpl" class="com.netcracker.Service.DetailTestService.DetailTestServiceImpl"/>
+
+    <bean id="detailTestDAOImpl" class="com.netcracker.DAO.DetailTestDAO.DetailTestDAOImpl"/>
+
+    <bean name="detailTestRest" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">
+        <property name="service" ref="detailTestService"></property>
+        <property name="serviceInterface" value="com.netcracker.Service.DetailTestService.DetailTestService"></property>
+    </bean>
+
+    <bean id="urlMappingDetailTest" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <props>
+                <prop key="/dispatcherDetailTest.service">detailTestRest</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="detailTestService" class="com.netcracker.Service.DetailTestService.DetailTestServiceImpl">
+        <property name="dao" ref="detailTestDAOImpl"/>
+    </bean>
+
+    <bean id="detailTestRESTService" class="com.netcracker.Service.DetailTestService.DetailTestRESTService">
+        <property name="detailTestService" ref="detailTestServiceImpl"/>
+    </bean>
+
+    <!--Question beans-->
+
+    <bean id="questionServiceImpl" class="com.netcracker.Service.QuestionService.QuestionServiceImpl"/>
+
+    <bean id="questionDAOImpl" class="com.netcracker.DAO.QuestionDAO.QuestionDAOImpl"/>
+
+    <bean name="questionRest" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">
+        <property name="service" ref="questionService"></property>
+        <property name="serviceInterface" value="com.netcracker.Service.QuestionService.QuestionService"></property>
+    </bean>
+
+    <bean id="urlMappingQuestion" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <props>
+                <prop key="/dispatcherQuestion.service">questionRest</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="questionService" class="com.netcracker.Service.QuestionService.QuestionServiceImpl">
+        <property name="dao" ref="questionDAOImpl"/>
+    </bean>
+
+    <bean id="questionRESTService" class="com.netcracker.Service.QuestionService.QuestionRESTService">
+        <property name="questionService" ref="questionServiceImpl"/>
+    </bean>
+
+    <!--Test beans-->
+
+    <bean id="testServiceImpl" class="com.netcracker.Service.TestService.TestServiceImpl"/>
+
+    <bean id="testDAOImpl" class="com.netcracker.DAO.TestDAO.TestDAOImpl"/>
+
+    <bean name="testRest" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">
+        <property name="service" ref="testService"></property>
+        <property name="serviceInterface" value="com.netcracker.Service.TestService.TestService"></property>
+    </bean>
+
+    <bean id="urlMappingTest" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <props>
+                <prop key="/dispatcherTest.service">testRest</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="testService" class="com.netcracker.Service.TestService.TestServiceImpl">
+        <property name="dao" ref="testDAOImpl"/>
+    </bean>
+
+    <bean id="testRESTService" class="com.netcracker.Service.TestService.TestRESTService">
+        <property name="testService" ref="testServiceImpl"/>
+    </bean>
+
+    <!--User beans-->
+
+    <bean id="userServiceImpl" class="com.netcracker.Service.UserService.UserServiceImpl"/>
+
+    <bean id="userDAOImpl" class="com.netcracker.DAO.UserDAO.UserDAOImpl"/>
+
+    <bean name="userRest" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">
+        <property name="service" ref="userService"></property>
+        <property name="serviceInterface" value="com.netcracker.Service.UserService.UserService"></property>
+    </bean>
+
+    <bean id="urlMappingUser" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <props>
+                <prop key="/dispatcherUser.service">userRest</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="userRESTService" class="com.netcracker.Service.UserService.UserRESTService">
+        <property name="userService" ref="userServiceImpl"/>
+    </bean>
+
+    <bean id="userService" class="com.netcracker.Service.UserService.UserServiceImpl">
+        <property name="dao" ref="userDAOImpl"/>
+    </bean>
+
+    <!--Answer beans-->
+
     <bean id="answerServiceImpl" class="com.netcracker.Service.AnswerService.AnswerServiceImpl"/>
 
     <bean id="answerDAOImpl" class="com.netcracker.DAO.AnswerDAO.AnswerDAOImpl"/>
+
+    <bean name="AnswerREST" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">
+        <property name="service" ref="answerService"></property>
+        <property name="serviceInterface" value="com.netcracker.Service.AnswerService.AnswerService"></property>
+    </bean>
+
+    <bean id="urlMappingAnswer" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <props>
+                <prop key="/dispatcherAnswer.service">AnswerREST</prop>
+            </props>
+        </property>
+    </bean>
 
     <bean id="answerRESTService" class="com.netcracker.Service.AnswerService.AnswerRESTService">
         <property name="answerService" ref="answerServiceImpl"/>
@@ -25,6 +229,8 @@
     <bean id="answerService" class="com.netcracker.Service.AnswerService.AnswerServiceImpl">
         <property name="dao" ref="answerDAOImpl"/>
     </bean>
+
+    <!--Session-->
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="configLocation">
