@@ -12,6 +12,8 @@
   <name>Maven Archetype for GWT</name>
 
   <properties>
+    <springframework.version>4.3.6.RELEASE</springframework.version>
+
     <gwtVersion>2.8.0</gwtVersion>
 
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -33,6 +35,33 @@
   </dependencyManagement>
 
   <dependencies>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <version>${springframework.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>${springframework.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+      <version>${springframework.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>sample</groupId>
+      <artifactId>com.sample</artifactId>
+      <version>1.0</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/src/main/resources/REST.jar</systemPath>
+    </dependency>
+
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-servlet</artifactId>
@@ -108,7 +137,6 @@
     <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
 
     <plugins>
-
       <!-- Mojo's Maven Plugin for GWT -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>

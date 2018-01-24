@@ -18,21 +18,8 @@
     <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
 
-  <!-- Servlets -->
-  <!--<servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>ui.server.GreetingServiceImpl</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/Client/greet</url-pattern>
-  </servlet-mapping>-->
-
-  <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>Client.html</welcome-file>
   </welcome-file-list>
-
 
 </web-app>

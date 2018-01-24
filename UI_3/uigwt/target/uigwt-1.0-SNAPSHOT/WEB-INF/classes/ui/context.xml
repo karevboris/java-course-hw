@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="answerBean" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+        <property name="serviceUrl" value="http://localhost:18080/RESTful/dispatcherAnswer.service"></property>
+        <property name="serviceInterface" value="com.netcracker.Service.AnswerService.AnswerService"></property>
+    </bean>
+
+    <bean id="userBean" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+        <property name="serviceUrl" value="http://localhost:18080/RESTful/dispatcherUser.service"></property>
+        <property name="serviceInterface" value="com.netcracker.Service.UserService.UserService"></property>
+    </bean>
+
+    <bean id="questionBean" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+        <property name="serviceUrl" value="http://localhost:18080/RESTful/dispatcher.service"></property>
+        <property name="serviceInterface" value="com.netcracker.Service.QuestionService.QuestionService"></property>
+    </bean>
+
+    <bean id="testBean" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+        <property name="serviceUrl" value="http://localhost:18080/RESTful/dispatcherTest.service"></property>
+        <property name="serviceInterface" value="com.netcracker.Service.TestService.TestService"></property>
+    </bean>
+
+    <bean id="testQuestBean" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+        <property name="serviceUrl" value="http://localhost:18080/RESTful/dispatcherTestQuest.service"></property>
+        <property name="serviceInterface" value="com.netcracker.Service.TestQuestService.TestQuestService"></property>
+    </bean>
+
+    <bean id="questAnswerBean" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+        <property name="serviceUrl" value="http://localhost:18080/RESTful/dispatcherQuestAnswer.service"></property>
+        <property name="serviceInterface" value="com.netcracker.Service.QuestAnswerService.QuestAnswerService"></property>
+    </bean>
+
+    <bean id="detailTestBean" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+        <property name="serviceUrl" value="http://localhost:18080/RESTful/dispatcherDetailTest.service"></property>
+        <property name="serviceInterface" value="com.netcracker.Service.DetailTestService.DetailTestService"></property>
+    </bean>
+
+    <bean id="userTestBean" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+        <property name="serviceUrl" value="http://localhost:18080/RESTful/dispatcherUserTest.service"></property>
+        <property name="serviceInterface" value="com.netcracker.Service.UserTestService.UserTestService"></property>
+    </bean>
+
+</beans>

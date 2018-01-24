@@ -10,6 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="rest" target="1.5" />
       <module name="uigwt" target="1.8" />
     </bytecodeTargetLevel>
   </component>
