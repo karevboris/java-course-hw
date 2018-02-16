@@ -7,15 +7,16 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
-public class QuestionDAOImpl extends AbstractDAO implements QuestionDAO {
+public class QuestionDAOImpl extends AbstractDAO<Question> implements QuestionDAO {
     public List<Question> getAll() {
         CriteriaQuery<Question> criteriaQuery = getSession().getCriteriaBuilder().createQuery(Question.class);
         criteriaQuery.from(Question.class);
         return getSession().createQuery(criteriaQuery).getResultList();
     }
 
-    public void create(Question question) {
+    public Question create(Question question) {
         persist(question);
+        return question;
     }
 
     public void delete(Question answer) {
@@ -30,7 +31,8 @@ public class QuestionDAOImpl extends AbstractDAO implements QuestionDAO {
         return (Question)getSession().get(Question.class, id);
     }
 
-    public void update(Question question) {
+    public Question update(Question question) {
         updateEntity(question);
+        return question;
     }
 }

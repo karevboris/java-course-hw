@@ -12,7 +12,6 @@ import java.io.Serializable;
 public class TestQuest implements Serializable {
 
     @EmbeddedId
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private TestQuestKey id;
 
     public TestQuest() {

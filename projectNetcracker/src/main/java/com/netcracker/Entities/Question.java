@@ -11,7 +11,8 @@ import java.io.Serializable;
 public class Question implements Serializable {
     @Id
     @Column(name = "quest_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "quest", sequenceName = "quest_seq", allocationSize = 1)
+    @GeneratedValue(generator = "quest", strategy = GenerationType.SEQUENCE)
     private Integer id;
 
     @Column(name = "text")
@@ -23,17 +24,13 @@ public class Question implements Serializable {
     @Column(name = "points")
     private Double points;
 
-    @Column(name = "user_id")
-    private Integer userId;
-
     public Question() {
     }
 
-    public Question(String text, Integer time, Double points, Integer userId) {
+    public Question(String text, Integer time, Double points) {
         this.text = text;
         this.time = time;
         this.points = points;
-        this.userId = userId;
     }
 
     public Integer getId() {
@@ -68,14 +65,6 @@ public class Question implements Serializable {
         this.points = points;
     }
 
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUser_id(Integer userId) {
-        this.userId = userId;
-    }
-
     @Override
     public String toString() {
         return "Question{" +
@@ -83,7 +72,6 @@ public class Question implements Serializable {
                 ", text='" + text + '\'' +
                 ", time=" + time +
                 ", points=" + points +
-                ", user_id=" + userId +
                 '}';
     }
 }

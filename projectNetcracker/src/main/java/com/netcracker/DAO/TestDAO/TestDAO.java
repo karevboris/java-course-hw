@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface TestDAO {
     List<Test> getAll();
-    void create(Test test);
+    Test create(Test test);
     void delete(Test test);
     void deleteById(Integer id);
     Test readById(Integer id);
-    void update(Test test);
+    Test update(Test test);
 }

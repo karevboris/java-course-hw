@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface QuestionDAO {
     List<Question> getAll();
-    void create(Question question);
+    Question create(Question question);
     void delete(Question question);
     void deleteById(Integer id);
     Question readById(Integer id);
-    void update(Question question);
+    Question update(Question question);
 }

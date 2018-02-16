@@ -23,9 +23,9 @@ public class AnswerServiceImpl implements AnswerService {
         this.dao = dao;
     }
 
-    public void add(Answer answer) {
+    public Answer add(Answer answer) {
         //logger.error("This is Error message, getAll()");
-        dao.create(answer);
+        return dao.create(answer);
     }
 
     public List<Answer> getAll() {
@@ -45,7 +45,15 @@ public class AnswerServiceImpl implements AnswerService {
         return dao.readById(id);
     }
 
-    public void update(Answer answer) {
-        dao.update(answer);
+    public Answer update(Answer answer) {
+        return dao.update(answer);
+    }
+
+    public List<Answer> getAnswers(Integer questId) {
+        return dao.getAnswers(questId);
+    }
+
+    public void deleteAnswers(Integer questId) {
+        dao.deleteAnswers(questId);
     }
 }

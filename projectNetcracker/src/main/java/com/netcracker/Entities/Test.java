@@ -12,7 +12,8 @@ public class Test implements Serializable {
 
     @Id
     @Column(name = "test_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "test", sequenceName = "test_seq", allocationSize = 1)
+    @GeneratedValue(generator = "test", strategy = GenerationType.SEQUENCE)
     private Integer id;
 
     @Column(name = "name")

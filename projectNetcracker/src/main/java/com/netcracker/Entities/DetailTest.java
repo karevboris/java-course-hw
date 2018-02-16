@@ -1,9 +1,11 @@
 package com.netcracker.Entities;
 
+import org.hibernate.type.DateType;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Date;
 
 @Entity
 @Table(name = "detail_test")
@@ -11,7 +13,8 @@ import java.io.Serializable;
 public class DetailTest implements Serializable{
     @Id
     @Column(name = "user_test_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "detail", sequenceName = "detail_seq", allocationSize = 1)
+    @GeneratedValue(generator = "detail", strategy = GenerationType.SEQUENCE)
     private Integer id;
 
     @Column(name = "count_passed")
@@ -23,13 +26,21 @@ public class DetailTest implements Serializable{
     @Column(name = "result")
     private Double result;
 
+    @Column(name = "attempts")
+    private Integer attempts;
+
+    @Column(name = "date")
+    private Date date;
+
     public DetailTest() {
     }
 
-    public DetailTest(Integer countPassed, Integer countFailed, Double result) {
+    public DetailTest(Integer countPassed, Integer countFailed, Double result, Integer attempts, Date date) {
         this.countPassed = countPassed;
         this.countFailed = countFailed;
         this.result = result;
+        this.attempts = attempts;
+        this.date = date;
     }
 
     public Integer getId() {
@@ -64,13 +75,31 @@ public class DetailTest implements Serializable{
         this.result = result;
     }
 
+    public Integer getAttempts() {
+        return attempts;
+    }
+
+    public void setAttempts(Integer attempts) {
+        this.attempts = attempts;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     @Override
     public String toString() {
-        return "DetailTestService{" +
+        return "DetailTest{" +
                 "id=" + id +
                 ", countPassed=" + countPassed +
                 ", countFailed=" + countFailed +
                 ", result=" + result +
+                ", attempts=" + attempts +
+                ", date=" + date +
                 '}';
     }
 }

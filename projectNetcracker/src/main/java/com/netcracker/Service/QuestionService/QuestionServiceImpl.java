@@ -18,8 +18,8 @@ public class QuestionServiceImpl implements QuestionService {
         this.dao = dao;
     }
 
-    public void add(Question question) {
-        dao.create(question);
+    public Question add(Question question) {
+        return dao.create(question);
     }
 
     public List<Question> getAll() {
@@ -38,7 +38,7 @@ public class QuestionServiceImpl implements QuestionService {
         return dao.readById(id);
     }
 
-    public void update(Question question) {
-        dao.update(question);
+    public Question update(Question question) {
+        return dao.update(question);
     }
 }

@@ -11,7 +11,8 @@ import java.io.Serializable;
 public class User implements Serializable{
     @Id
     @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "user", sequenceName = "user_seq", allocationSize = 1)
+    @GeneratedValue(generator = "user", strategy = GenerationType.SEQUENCE)
     private Integer id;
 
     @Column(name = "password")

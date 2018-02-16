@@ -2,19 +2,22 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
         http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <context:component-scan base-package="com.netcracker"/>
 
     <mvc:annotation-driven/>
 
-    <!--UserTest beans-->
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 
     <bean id="userTestServiceImpl" class="com.netcracker.Service.UserTestService.UserTestServiceImpl"/>
 
@@ -66,33 +69,6 @@
 
     <bean id="testQuestRESTService" class="com.netcracker.Service.TestQuestService.TestQuestRESTService">
         <property name="testQuestService" ref="testQuestServiceImpl"/>
-    </bean>
-
-    <!--QuestAnswer beans-->
-
-    <bean id="questAnswerServiceImpl" class="com.netcracker.Service.QuestAnswerService.QuestAnswerServiceImpl"/>
-
-    <bean id="questAnswerDAOImpl" class="com.netcracker.DAO.QuestAnswerDAO.QuestAnswerDAOImpl"/>
-
-    <bean name="questAnswerRest" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">
-        <property name="service" ref="questAnswerService"></property>
-        <property name="serviceInterface" value="com.netcracker.Service.QuestAnswerService.QuestAnswerService"></property>
-    </bean>
-
-    <bean id="urlMappingQuestAnswer" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-        <property name="mappings">
-            <props>
-                <prop key="/dispatcherQuestAnswer.service">questAnswerRest</prop>
-            </props>
-        </property>
-    </bean>
-
-    <bean id="questAnswerService" class="com.netcracker.Service.QuestAnswerService.QuestAnswerServiceImpl">
-        <property name="dao" ref="questAnswerDAOImpl"/>
-    </bean>
-
-    <bean id="questAnswerRESTService" class="com.netcracker.Service.QuestAnswerService.QuestAnswerRESTService">
-        <property name="questAnswerService" ref="questAnswerServiceImpl"/>
     </bean>
 
     <!--DetailTest beans-->

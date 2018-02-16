@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
-public class AnswerDAOImpl extends AbstractDAO implements AnswerDAO {
+public class AnswerDAOImpl extends AbstractDAO<Answer> implements AnswerDAO {
 
     public List<Answer> getAll() {
         CriteriaQuery<Answer> criteriaQuery = getSession().getCriteriaBuilder().createQuery(Answer.class);
@@ -15,8 +15,9 @@ public class AnswerDAOImpl extends AbstractDAO implements AnswerDAO {
         return getSession().createQuery(criteriaQuery).getResultList();
     }
 
-    public void create(Answer answer) {
+    public Answer create(Answer answer) {
         persist(answer);
+        return answer;
     }
 
     public void delete(Answer answer) {
@@ -31,7 +32,19 @@ public class AnswerDAOImpl extends AbstractDAO implements AnswerDAO {
        return (Answer)getSession().get(Answer.class, id);
     }
 
-    public void update(Answer answer) {
+    public Answer update(Answer answer) {
         updateEntity(answer);
+        return answer;
+    }
+
+    public List<Answer> getAnswers(Integer questId) {
+        String query = "select * from answers where answers.quest_id =:questId";
+        return getSession().createSQLQuery(query).addEntity(Answer.class).setParameter("questId", questId).getResultList();
+    }
+
+    public void deleteAnswers(Integer questId) {
+        for (Answer answer:getAnswers(questId)){
+            delete(answer);
+        }
     }
 }

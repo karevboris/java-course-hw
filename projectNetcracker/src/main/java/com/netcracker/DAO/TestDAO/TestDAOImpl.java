@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
-public class TestDAOImpl extends AbstractDAO implements TestDAO {
+public class TestDAOImpl extends AbstractDAO<Test> implements TestDAO {
 
     public List<Test> getAll() {
         CriteriaQuery<Test> criteriaQuery = getSession().getCriteriaBuilder().createQuery(Test.class);
@@ -15,8 +15,9 @@ public class TestDAOImpl extends AbstractDAO implements TestDAO {
         return getSession().createQuery(criteriaQuery).getResultList();
     }
 
-    public void create(Test test) {
+    public Test create(Test test) {
         persist(test);
+        return test;
     }
 
     public void delete(Test test) {
@@ -31,7 +32,8 @@ public class TestDAOImpl extends AbstractDAO implements TestDAO {
         return (Test)getSession().get(Test.class, id);
     }
 
-    public void update(Test test) {
+    public Test update(Test test) {
         updateEntity(test);
+        return test;
     }
 }

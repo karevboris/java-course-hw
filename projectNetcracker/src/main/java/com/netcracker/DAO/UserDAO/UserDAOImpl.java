@@ -6,15 +6,21 @@ import com.netcracker.Entities.User;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
-public class UserDAOImpl extends AbstractDAO implements UserDAO {
+public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
     public List<User> getAll() {
         CriteriaQuery<User> criteriaQuery = getSession().getCriteriaBuilder().createQuery(User.class);
         criteriaQuery.from(User.class);
         return getSession().createQuery(criteriaQuery).getResultList();
     }
 
-    public void create(User user) {
+    public User readByUsername(String username) {
+        String query = "select * from users where users.login=:username";
+        return (User)getSession().createSQLQuery(query).addEntity(User.class).setParameter("username", username).getResultList().get(0);
+    }
+
+    public User create(User user) {
         persist(user);
+        return user;
     }
 
     public void delete(User user) {
@@ -29,7 +35,8 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
         return (User)getSession().get(User.class, id);
     }
 
-    public void update(User user) {
+    public User update(User user) {
         updateEntity(user);
+        return user;
     }
 }

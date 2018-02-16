@@ -18,8 +18,8 @@ public class TestServiceImpl implements TestService {
         this.dao = dao;
     }
 
-    public void add(Test test) {
-        dao.create(test);
+    public Test add(Test test) {
+        return dao.create(test);
     }
 
     public List<Test> getAll() {
@@ -38,7 +38,15 @@ public class TestServiceImpl implements TestService {
         return dao.readById(id);
     }
 
-    public void update(Test test) {
-        dao.update(test);
+    public Test update(Test test) {
+        return dao.update(test);
+    }
+
+    public Test getLastTest(Integer userId) {
+        Test test = new Test();
+        for (Test t:getAll()){
+            if(t.getUserId().equals(userId)) test = t;
+        }
+        return test;
     }
 }

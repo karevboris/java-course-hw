@@ -18,8 +18,8 @@ public class DetailTestServiceImpl implements DetailTestService {
         this.dao = dao;
     }
 
-    public void add(DetailTest detailTest) {
-        dao.create(detailTest);
+    public DetailTest add(DetailTest detailTest) {
+        return dao.create(detailTest);
     }
 
     public List<DetailTest> getAll() {
@@ -38,7 +38,7 @@ public class DetailTestServiceImpl implements DetailTestService {
         return dao.readById(id);
     }
 
-    public void update(DetailTest detailTest) {
-        dao.update(detailTest);
+    public DetailTest update(DetailTest detailTest) {
+        return dao.update(detailTest);
     }
 }

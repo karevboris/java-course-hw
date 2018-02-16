@@ -2,6 +2,7 @@ package com.netcracker.Service.TestQuestService;
 
 import com.netcracker.DAO.TestQuestDAO.TestQuestDAO;
 import com.netcracker.Entities.PrimaryKey.TestQuestKey;
+import com.netcracker.Entities.Question;
 import com.netcracker.Entities.TestQuest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,8 @@ public class TestQuestServiceImpl implements TestQuestService {
         this.dao = dao;
     }
 
-    public void add(TestQuest testQuest) {
-        dao.create(testQuest);
+    public TestQuest add(TestQuest testQuest) {
+        return dao.create(testQuest);
     }
 
     public List<TestQuest> getAll() {
@@ -39,7 +40,19 @@ public class TestQuestServiceImpl implements TestQuestService {
         return dao.readById(id);
     }
 
-    public void update(TestQuest testQuest) {
-        dao.update(testQuest);
+    public TestQuest update(TestQuest testQuest) {
+        return dao.update(testQuest);
+    }
+
+    public List<Question> getQuestions(Integer testId) {
+        return dao.getQuestions(testId);
+    }
+
+    public void deleteQuestions(Integer testId) {
+        dao.deleteQuestions(testId);
+    }
+
+    public Integer getTestTime(Integer testId) {
+        return dao.getTestTime(testId);
     }
 }

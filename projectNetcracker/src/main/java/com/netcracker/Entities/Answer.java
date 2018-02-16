@@ -11,17 +11,26 @@ import java.io.Serializable;
 public class Answer implements Serializable {
     @Id
     @Column(name = "answer_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "answer", sequenceName = "answer_seq", allocationSize = 1)
+    @GeneratedValue(generator = "answer", strategy = GenerationType.SEQUENCE)
     private Integer id;
 
     @Column(name = "text")
     private String text;
 
+    @Column(name = "iscorrect")
+    private Boolean isCorrect;
+
+    @Column(name = "quest_id")
+    private Integer questId;
+
     public Answer() {
     }
 
-    public Answer(String text) {
+    public Answer(String text, Boolean isCorrect, Integer questId) {
         this.text = text;
+        this.isCorrect = isCorrect;
+        this.questId = questId;
     }
 
     public Integer getId() {
@@ -40,10 +49,29 @@ public class Answer implements Serializable {
         this.text = text;
     }
 
+    public Boolean getCorrect() {
+        return isCorrect;
+    }
+
+    public void setCorrect(Boolean correct) {
+        isCorrect = correct;
+    }
+
+    public Integer getQuestId() {
+        return questId;
+    }
+
+    public void setQuestId(Integer questId) {
+        this.questId = questId;
+    }
+
     @Override
     public String toString() {
-        return "Answer:" +
+        return "Answer{" +
                 "id=" + id +
-                ", text=" + text;
+                ", text='" + text + '\'' +
+                ", isCorrect=" + isCorrect +
+                ", questId=" + questId +
+                '}';
     }
 }
