@@ -17,11 +17,11 @@ public interface UserClient extends RestService {
     void get(@PathParam("id") int id, MethodCallback<UserGWT> callback);
 
     @POST
-    void add(UserGWT userGWT, MethodCallback callback);
+    void add(UserGWT userGWT, MethodCallback<UserGWT> callback);
 
     @POST
     @Path("/update")
-    void update(UserGWT userGWT, MethodCallback<Boolean> callback);
+    void update(UserGWT userGWT, MethodCallback<UserGWT> callback);
 
     @DELETE
     @Path("/{id}")
@@ -29,4 +29,8 @@ public interface UserClient extends RestService {
 
     @DELETE
     void delete(UserGWT userGWT, MethodCallback<Integer> callback);
+
+    @GET
+    @Path("/getUsername")
+    void getUserByUsername(MethodCallback<UserGWT> callback);
 }

@@ -22,7 +22,7 @@ public class AnswerClient_Generated_RestServiceProxy_ implements ui.client.Inter
   public org.fusesource.restygwt.client.Dispatcher getDispatcher() {
     return this.dispatcher;
   }
-  public void add(ui.shared.AnswerGWT answerGWT, org.fusesource.restygwt.client.MethodCallback callback) {
+  public void add(ui.shared.AnswerGWT answerGWT, org.fusesource.restygwt.client.MethodCallback<ui.shared.AnswerGWT> callback) {
     final ui.shared.AnswerGWT final_answerGWT = answerGWT;
     final org.fusesource.restygwt.client.Method __method =
     getResource()
@@ -31,10 +31,10 @@ public class AnswerClient_Generated_RestServiceProxy_ implements ui.client.Inter
     __method.header(org.fusesource.restygwt.client.Resource.HEADER_ACCEPT, org.fusesource.restygwt.client.Resource.CONTENT_TYPE_JSON);
     __method.json(ui.shared.AnswerGWT_Generated_JsonEncoderDecoder_.INSTANCE.encode(answerGWT));
     try {
-      __method.send(new org.fusesource.restygwt.client.AbstractRequestCallback<java.lang.Object>(__method, callback) {
-        protected java.lang.Object parseResult() throws Exception {
+      __method.send(new org.fusesource.restygwt.client.AbstractRequestCallback<ui.shared.AnswerGWT>(__method, callback) {
+        protected ui.shared.AnswerGWT parseResult() throws Exception {
           try {
-            return org.fusesource.restygwt.client.ObjectEncoderDecoder.INSTANCE.decode(com.google.gwt.json.client.JSONParser.parse(__method.getResponse().getText()));
+            return ui.shared.AnswerGWT_Generated_JsonEncoderDecoder_.INSTANCE.decode(com.google.gwt.json.client.JSONParser.parse(__method.getResponse().getText()));
           } catch (Throwable __e) {
             throw new org.fusesource.restygwt.client.ResponseFormatException("Response was NOT a valid JSON document", __e);
           }
@@ -57,6 +57,28 @@ public class AnswerClient_Generated_RestServiceProxy_ implements ui.client.Inter
         protected java.lang.Integer parseResult() throws Exception {
           try {
             return org.fusesource.restygwt.client.AbstractJsonEncoderDecoder.INT.decode(com.google.gwt.json.client.JSONParser.parse(__method.getResponse().getText()));
+          } catch (Throwable __e) {
+            throw new org.fusesource.restygwt.client.ResponseFormatException("Response was NOT a valid JSON document", __e);
+          }
+        }
+      });
+    } catch (com.google.gwt.http.client.RequestException __e) {
+      callback.onFailure(__method,__e);
+    }
+  }
+  public void deleteAnswers(int id, org.fusesource.restygwt.client.MethodCallback callback) {
+    final int final_id = id;
+    final org.fusesource.restygwt.client.Method __method =
+    getResource()
+    .resolve("/deleteAnswers/"+(""+id== null? null : com.google.gwt.http.client.URL.encodePathSegment(""+id))+"")
+    .delete();
+    __method.setDispatcher(this.dispatcher);
+    __method.header(org.fusesource.restygwt.client.Resource.HEADER_ACCEPT, org.fusesource.restygwt.client.Resource.CONTENT_TYPE_JSON);
+    try {
+      __method.send(new org.fusesource.restygwt.client.AbstractRequestCallback<java.lang.Object>(__method, callback) {
+        protected java.lang.Object parseResult() throws Exception {
+          try {
+            return org.fusesource.restygwt.client.ObjectEncoderDecoder.INSTANCE.decode(com.google.gwt.json.client.JSONParser.parse(__method.getResponse().getText()));
           } catch (Throwable __e) {
             throw new org.fusesource.restygwt.client.ResponseFormatException("Response was NOT a valid JSON document", __e);
           }
@@ -130,7 +152,51 @@ public class AnswerClient_Generated_RestServiceProxy_ implements ui.client.Inter
       callback.onFailure(__method,__e);
     }
   }
-  public void update(ui.shared.AnswerGWT answerGWT, org.fusesource.restygwt.client.MethodCallback<java.lang.Boolean> callback) {
+  public void getAnswers(int id, org.fusesource.restygwt.client.MethodCallback<java.util.List<ui.shared.AnswerGWT>> callback) {
+    final int final_id = id;
+    final org.fusesource.restygwt.client.Method __method =
+    getResource()
+    .resolve("/quest/"+(""+id== null? null : com.google.gwt.http.client.URL.encodePathSegment(""+id))+"")
+    .get();
+    __method.setDispatcher(this.dispatcher);
+    __method.header(org.fusesource.restygwt.client.Resource.HEADER_ACCEPT, org.fusesource.restygwt.client.Resource.CONTENT_TYPE_JSON);
+    try {
+      __method.send(new org.fusesource.restygwt.client.AbstractRequestCallback<java.util.List<ui.shared.AnswerGWT>>(__method, callback) {
+        protected java.util.List<ui.shared.AnswerGWT> parseResult() throws Exception {
+          try {
+            return org.fusesource.restygwt.client.AbstractJsonEncoderDecoder.toList(com.google.gwt.json.client.JSONParser.parse(__method.getResponse().getText()), ui.shared.AnswerGWT_Generated_JsonEncoderDecoder_.INSTANCE);
+          } catch (Throwable __e) {
+            throw new org.fusesource.restygwt.client.ResponseFormatException("Response was NOT a valid JSON document", __e);
+          }
+        }
+      });
+    } catch (com.google.gwt.http.client.RequestException __e) {
+      callback.onFailure(__method,__e);
+    }
+  }
+  public void getTestAnswers(int questionGWTList, org.fusesource.restygwt.client.MethodCallback<java.util.List<java.util.List<ui.shared.AnswerGWT>>> callback) {
+    final int final_questionGWTList = questionGWTList;
+    final org.fusesource.restygwt.client.Method __method =
+    getResource()
+    .resolve("/getTestAnswers/"+(""+questionGWTList== null? null : com.google.gwt.http.client.URL.encodePathSegment(""+questionGWTList))+"")
+    .get();
+    __method.setDispatcher(this.dispatcher);
+    __method.header(org.fusesource.restygwt.client.Resource.HEADER_ACCEPT, org.fusesource.restygwt.client.Resource.CONTENT_TYPE_JSON);
+    try {
+      __method.send(new org.fusesource.restygwt.client.AbstractRequestCallback<java.util.List<java.util.List<ui.shared.AnswerGWT>>>(__method, callback) {
+        protected java.util.List<java.util.List<ui.shared.AnswerGWT>> parseResult() throws Exception {
+          try {
+            return org.fusesource.restygwt.client.AbstractJsonEncoderDecoder.toList(com.google.gwt.json.client.JSONParser.parse(__method.getResponse().getText()), org.fusesource.restygwt.client.AbstractNestedJsonEncoderDecoder.listEncoderDecoder( ui.shared.AnswerGWT_Generated_JsonEncoderDecoder_.INSTANCE ));
+          } catch (Throwable __e) {
+            throw new org.fusesource.restygwt.client.ResponseFormatException("Response was NOT a valid JSON document", __e);
+          }
+        }
+      });
+    } catch (com.google.gwt.http.client.RequestException __e) {
+      callback.onFailure(__method,__e);
+    }
+  }
+  public void update(ui.shared.AnswerGWT answerGWT, org.fusesource.restygwt.client.MethodCallback<ui.shared.AnswerGWT> callback) {
     final ui.shared.AnswerGWT final_answerGWT = answerGWT;
     final org.fusesource.restygwt.client.Method __method =
     getResource()
@@ -140,10 +206,10 @@ public class AnswerClient_Generated_RestServiceProxy_ implements ui.client.Inter
     __method.header(org.fusesource.restygwt.client.Resource.HEADER_ACCEPT, org.fusesource.restygwt.client.Resource.CONTENT_TYPE_JSON);
     __method.json(ui.shared.AnswerGWT_Generated_JsonEncoderDecoder_.INSTANCE.encode(answerGWT));
     try {
-      __method.send(new org.fusesource.restygwt.client.AbstractRequestCallback<java.lang.Boolean>(__method, callback) {
-        protected java.lang.Boolean parseResult() throws Exception {
+      __method.send(new org.fusesource.restygwt.client.AbstractRequestCallback<ui.shared.AnswerGWT>(__method, callback) {
+        protected ui.shared.AnswerGWT parseResult() throws Exception {
           try {
-            return org.fusesource.restygwt.client.AbstractJsonEncoderDecoder.BOOLEAN.decode(com.google.gwt.json.client.JSONParser.parse(__method.getResponse().getText()));
+            return ui.shared.AnswerGWT_Generated_JsonEncoderDecoder_.INSTANCE.decode(com.google.gwt.json.client.JSONParser.parse(__method.getResponse().getText()));
           } catch (Throwable __e) {
             throw new org.fusesource.restygwt.client.ResponseFormatException("Response was NOT a valid JSON document", __e);
           }

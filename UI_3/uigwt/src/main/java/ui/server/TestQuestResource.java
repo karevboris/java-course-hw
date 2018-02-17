@@ -1,10 +1,12 @@
 package ui.server;
 
 import com.netcracker.Entities.PrimaryKey.TestQuestKey;
+import com.netcracker.Entities.Question;
 import com.netcracker.Entities.TestQuest;
 import com.netcracker.Service.TestQuestService.TestQuestService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import ui.shared.QuestionGWT;
 import ui.shared.TestQuestGWT;
 
 import javax.ws.rs.*;
@@ -37,20 +39,25 @@ public class TestQuestResource {
 
     @POST
     @Consumes("application/json")
-    public void add(TestQuestGWT testQuestGWT){
-        testQuestService.add(new TestQuest());
+    @Produces("application/json")
+    public TestQuestGWT add(TestQuestGWT testQuestGWT){
+        TestQuestKey testQuestKey = new TestQuestKey(testQuestGWT.getQuestId(), testQuestGWT.getTestId());
+        TestQuest testQuest = new TestQuest();
+        testQuest.setId(testQuestKey);
+        testQuest = testQuestService.add(testQuest);
+        return new TestQuestGWT(testQuest.getId().getQuestId(), testQuest.getId().getTestId());
     }
 
     @POST
     @Path("/update")
     @Consumes("application/json")
-    public Boolean update(TestQuestGWT testQuestGWT){
+    @Produces("application/json")
+    public TestQuestGWT update(TestQuestGWT testQuestGWT){
         TestQuestKey testQuestKey = new TestQuestKey(testQuestGWT.getQuestId(), testQuestGWT.getTestId());
-        if(testQuestService.readById(testQuestKey)==null) return false;
         TestQuest testQuest = new TestQuest();
         testQuest.setId(testQuestKey);
-        testQuestService.update(testQuest);
-        return true;
+        testQuest = testQuestService.update(testQuest);
+        return new TestQuestGWT(testQuest.getId().getQuestId(), testQuest.getId().getTestId());
     }
 
     @DELETE
@@ -75,5 +82,28 @@ public class TestQuestResource {
         testQuestService.delete(testQuest);
         if(testQuestService.readById(testQuestKey)!=null) return 2;
         return 0;
+    }
+
+
+    @GET
+    @Path("/getQuestions/{id}")
+    public List<QuestionGWT> getQuestions(@PathParam("id")int id){
+        List<QuestionGWT> questionGWTS = new LinkedList<>();
+        for(Question question:testQuestService.getQuestions(id)){
+            questionGWTS.add(new QuestionGWT(question.getId(), question.getText(), question.getTime(), question.getPoints()));
+        }
+        return questionGWTS;
+    }
+
+    @DELETE
+    @Path("/deleteQuestions/{id}")
+    public void deleteQuestions(@PathParam("id")int id){
+        testQuestService.deleteQuestions(id);
+    }
+
+    @GET
+    @Path("getTestTime/{id}")
+    public Integer getTestTime(@PathParam("id") int id){
+        return testQuestService.getTestTime(id);
     }
 }

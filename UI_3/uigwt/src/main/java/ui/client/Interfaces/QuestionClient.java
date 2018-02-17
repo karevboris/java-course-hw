@@ -17,11 +17,11 @@ public interface QuestionClient extends RestService {
     void get(@PathParam("id") int id, MethodCallback<QuestionGWT> callback);
 
     @POST
-    void add(QuestionGWT questionGWT, MethodCallback callback);
+    void add(QuestionGWT questionGWT, MethodCallback<QuestionGWT> callback);
 
     @POST
     @Path("/update")
-    void update(QuestionGWT questionGWT, MethodCallback<Boolean> callback);
+    void update(QuestionGWT questionGWT, MethodCallback<QuestionGWT> callback);
 
     @DELETE
     @Path("/{id}")

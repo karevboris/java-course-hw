@@ -8,15 +8,14 @@ public class QuestionGWT {
     private final String text;
     private final Integer time;
     private final Double points;
-    private final Integer userId;
+    private Integer answer;
 
     @JsonCreator
-    public QuestionGWT(@JsonProperty("id") Integer id, @JsonProperty("text")String text, @JsonProperty("time")Integer time, @JsonProperty("points")Double points, @JsonProperty("userId")Integer userId) {
+    public QuestionGWT(@JsonProperty("id") Integer id, @JsonProperty("text")String text, @JsonProperty("time")Integer time, @JsonProperty("points")Double points) {
         this.id = id;
         this.text = text;
         this.time = time;
         this.points = points;
-        this.userId = userId;
     }
 
     public Integer getId() {
@@ -35,8 +34,12 @@ public class QuestionGWT {
         return points;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public Integer getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(Integer answer) {
+        this.answer = answer;
     }
 
     @Override
@@ -46,7 +49,28 @@ public class QuestionGWT {
                 ", text='" + text + '\'' +
                 ", time=" + time +
                 ", points=" + points +
-                ", userId=" + userId +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        QuestionGWT that = (QuestionGWT) o;
+
+        if (!id.equals(that.id)) return false;
+        if (text != null ? !text.equals(that.text) : that.text != null) return false;
+        if (time != null ? !time.equals(that.time) : that.time != null) return false;
+        return points != null ? points.equals(that.points) : that.points == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + (text != null ? text.hashCode() : 0);
+        result = 31 * result + (time != null ? time.hashCode() : 0);
+        result = 31 * result + (points != null ? points.hashCode() : 0);
+        return result;
     }
 }

@@ -1,0 +1,7 @@
+.row
+{
+    height: 100px;
+    display: inline-block;
+    top:10px;
+    width: 30%;
+}

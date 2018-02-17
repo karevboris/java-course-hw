@@ -2,16 +2,17 @@ package ui.client.View;
 
 import com.google.gwt.user.client.ui.*;
 
-public class Field extends VerticalPanel {
+public class Field extends HorizontalPanel {
     private Label label;
-    private TextArea textArea;
+    private TextBox textBox;
 
     public Field(String nameLabel) {
+        setSpacing(10);
         label = new Label(nameLabel);
-        textArea = new TextArea();
+        textBox = new TextBox();
         setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         add(label);
-        add(textArea);
+        add(textBox);
         setVisible(true);
     }
 
@@ -23,11 +24,11 @@ public class Field extends VerticalPanel {
         this.label = label;
     }
 
-    public TextArea getTextArea() {
-        return textArea;
+    public TextBox getTextBox() {
+        return textBox;
     }
 
-    public void setTextArea(TextArea textArea) {
-        this.textArea = textArea;
+    public void setTextArea(TextBox textBox) {
+        this.textBox = textBox;
     }
 }

@@ -4,6 +4,9 @@ import com.netcracker.Entities.User;
 import com.netcracker.Service.UserService.UserService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ui.shared.UserGWT;
 
 import javax.ws.rs.*;
@@ -14,6 +17,7 @@ import java.util.List;
 public class UserResource {
     private ApplicationContext context = new ClassPathXmlApplicationContext("ui/context.xml");
     private UserService userService = (UserService)context.getBean("userBean");
+    private BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
 
     @GET
     @Produces("application/json")
@@ -35,19 +39,21 @@ public class UserResource {
 
     @POST
     @Consumes("application/json")
-    public void add(UserGWT userGWT){
-        userService.add(new User(userGWT.getPassword(),userGWT.getAdmin(),userGWT.getLogin()));
+    @Produces("application/json")
+    public UserGWT add(UserGWT userGWT){
+        User user = userService.add(new User(bcryptEncoder.encode(userGWT.getPassword()),userGWT.getAdmin(),userGWT.getLogin()));
+        return new UserGWT(user.getId(), user.getLogin(), user.getPassword(), user.getAdmin());
     }
 
     @POST
     @Path("/update")
     @Consumes("application/json")
-    public Boolean update(UserGWT userGWT){
-        if(userService.readById(userGWT.getId())==null) return false;
-        User user = new User(userGWT.getPassword(),userGWT.getAdmin(),userGWT.getLogin());
+    @Produces("application/json")
+    public UserGWT update(UserGWT userGWT){
+        User user = new User(bcryptEncoder.encode(userGWT.getPassword()),userGWT.getAdmin(),userGWT.getLogin());
         user.setId(userGWT.getId());
-        userService.update(user);
-        return true;
+        user = userService.update(user);
+        return new UserGWT(user.getId(), user.getLogin(), user.getPassword(), user.getAdmin());
     }
 
     @DELETE
@@ -70,5 +76,14 @@ public class UserResource {
         userService.delete(user);
         if(userService.readById(userGWT.getId())!=null) return 2;
         return 0;
+    }
+
+    @GET
+    @Path("/getUsername")
+    @Produces("application/json")
+    public UserGWT getUserByUsername(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.readByUsername(auth.getName());
+        return new UserGWT(user.getId(), user.getLogin(), user.getPassword(), user.getAdmin());
     }
 }

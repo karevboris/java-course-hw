@@ -15,7 +15,7 @@
     </bean>
 
     <bean id="questionBean" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
-        <property name="serviceUrl" value="http://localhost:18080/RESTful/dispatcher.service"></property>
+        <property name="serviceUrl" value="http://localhost:18080/RESTful/dispatcherQuestion.service"></property>
         <property name="serviceInterface" value="com.netcracker.Service.QuestionService.QuestionService"></property>
     </bean>
 
@@ -27,11 +27,6 @@
     <bean id="testQuestBean" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
         <property name="serviceUrl" value="http://localhost:18080/RESTful/dispatcherTestQuest.service"></property>
         <property name="serviceInterface" value="com.netcracker.Service.TestQuestService.TestQuestService"></property>
-    </bean>
-
-    <bean id="questAnswerBean" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
-        <property name="serviceUrl" value="http://localhost:18080/RESTful/dispatcherQuestAnswer.service"></property>
-        <property name="serviceInterface" value="com.netcracker.Service.QuestAnswerService.QuestAnswerService"></property>
     </bean>
 
     <bean id="detailTestBean" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">

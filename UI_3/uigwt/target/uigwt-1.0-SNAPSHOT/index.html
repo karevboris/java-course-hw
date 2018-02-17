@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<script src="js/angular.min.js"></script>
+<link rel="stylesheet" type="text/css" href="myStyle.css">
+
+<body ng-app="myApp">
+
+<div ng-controller="myCtrl">
+    <div class="row">
+    <button ng-click="myFunc()">Back</button>
+    <p>Enter userId: <input type="text" ng-model = "userId"></p>
+    <button ng-click="findUserId()">Search</button>
+
+    <p>Statistic of user:</p>
+
+    <table border="1">
+        <tr>
+            <th>Test Id</th>
+            <th>Name</th>
+            <th>Passed</th>
+            <th>Failed</th>
+            <th>Result</th>
+            <th>Attempts</th>
+        </tr>
+        <tr ng-repeat="test in detailsUser">
+            <td>{{test.testid}}</td>
+            <td>{{test.name}}</td>
+            <td>{{test.passed}}</td>
+            <td>{{test.failed}}</td>
+            <td>{{test.result}}</td>
+            <td>{{test.attempts}}</td>
+        </tr>
+    </table>
+    </div>
+
+    <div class="row">
+        <p>Enter testId: <input type="text" ng-model = "testId"></p>
+        <button ng-click="findTestId()">Search</button>
+        <p>Statistic of test:</p>
+
+        <table border="1">
+            <tr>
+                <th>User Id</th>
+                <th>Login</th>
+                <th>Passed</th>
+                <th>Failed</th>
+                <th>Result</th>
+                <th>Attempts</th>
+            </tr>
+            <tr ng-repeat="test in detailsTest">
+                <td>{{test.testid}}</td>
+                <td>{{test.name}}</td>
+                <td>{{test.passed}}</td>
+                <td>{{test.failed}}</td>
+                <td>{{test.result}}</td>
+                <td>{{test.attempts}}</td>
+            </tr>
+        </table>
+    </div>
+    </div>
+</div>
+
+<script>
+    angular.module('myApp', [])
+        .controller('myCtrl', ['$scope', '$http', function($scope, $http) {
+            $scope.myFunc = function() {
+                document.location.href = '/uigwt-1.0-SNAPSHOT/#AdminTests', true;
+            };
+
+            $scope.findUserId = function() {
+                $http.get('http://localhost:18080/uigwt-1.0-SNAPSHOT/api/userTest/readFromAngularForUser/'+$scope.userId).then(successCallback, errorCallback);
+
+                function successCallback(response){
+                    $scope.detailsUser = response.data;
+                }
+                function errorCallback(error){
+                    window.alert("Error");
+                }
+            };
+
+            $scope.findTestId = function() {
+                $http.get('http://localhost:18080/uigwt-1.0-SNAPSHOT/api/userTest/readFromAngularForTest/'+$scope.testId).then(successCallback, errorCallback);
+
+                function successCallback(response){
+                    $scope.detailsTest = response.data;
+                }
+                function errorCallback(error){
+                    window.alert("Error");
+                }
+            };
+
+        }]);
+</script>
+
+</body>
+</html>

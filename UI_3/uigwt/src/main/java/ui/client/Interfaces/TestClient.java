@@ -17,11 +17,11 @@ public interface TestClient extends RestService {
     void get(@PathParam("id") int id, MethodCallback<TestGWT> callback);
 
     @POST
-    void add(TestGWT testGWT, MethodCallback callback);
+    void add(TestGWT testGWT, MethodCallback<TestGWT> callback);
 
     @POST
     @Path("/update")
-    void update(TestGWT testGWT, MethodCallback<Boolean> callback);
+    void update(TestGWT testGWT, MethodCallback<TestGWT> callback);
 
     @DELETE
     @Path("/{id}")
@@ -29,4 +29,8 @@ public interface TestClient extends RestService {
 
     @DELETE
     void delete(TestGWT testGWT, MethodCallback<Integer> callback);
+
+    @GET
+    @Path("/getLastTest/{id}")
+    void getLastTest(@PathParam("id") int id, MethodCallback<TestGWT> callback);
 }

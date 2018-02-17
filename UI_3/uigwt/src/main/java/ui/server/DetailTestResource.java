@@ -7,8 +7,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ui.shared.DetailTestGWT;
 
 import javax.ws.rs.*;
+import java.sql.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 @Path("detailTest")
 public class DetailTestResource {
@@ -20,7 +22,7 @@ public class DetailTestResource {
     public List<DetailTestGWT> getAll(){
         List<DetailTestGWT> detailTestGWTS = new LinkedList<>();
         for(DetailTest detailTest:detailTestService.getAll()){
-            detailTestGWTS.add(new DetailTestGWT(detailTest.getId(),detailTest.getCountPassed(), detailTest.getCountFailed(), detailTest.getResult()));
+            detailTestGWTS.add(new DetailTestGWT(detailTest.getId(),detailTest.getCountPassed(), detailTest.getCountFailed(), detailTest.getResult(), detailTest.getAttempts(), detailTest.getDate().toString()));
         }
         return detailTestGWTS;
     }
@@ -30,24 +32,28 @@ public class DetailTestResource {
     @Produces("application/json")
     public DetailTestGWT get(@PathParam("id") int id){
         DetailTest detailTest = detailTestService.readById(id);
-        return new DetailTestGWT(detailTest.getId(), detailTest.getCountPassed(), detailTest.getCountFailed(), detailTest.getResult());
+        return new DetailTestGWT(detailTest.getId(), detailTest.getCountPassed(), detailTest.getCountFailed(), detailTest.getResult(), detailTest.getAttempts(), detailTest.getDate().toString());
     }
 
     @POST
     @Consumes("application/json")
-    public void add(DetailTestGWT detailTestGWT){
-        detailTestService.add(new DetailTest(detailTestGWT.getCountPassed(), detailTestGWT.getCountFailed(), detailTestGWT.getResult()));
+    @Produces("application/json")
+    public DetailTestGWT add(DetailTestGWT detailTestGWT){
+        StringTokenizer stok = new StringTokenizer(detailTestGWT.getDate(),"-");
+        DetailTest detailTest = detailTestService.add(new DetailTest(detailTestGWT.getCountPassed(), detailTestGWT.getCountFailed(), detailTestGWT.getResult(), detailTestGWT.getAttempts(), new Date(Integer.valueOf(stok.nextToken()), Integer.valueOf(stok.nextToken()), Integer.valueOf(stok.nextToken()))));
+        return new DetailTestGWT(detailTest.getId(), detailTest.getCountPassed(),detailTest.getCountFailed(), detailTest.getResult(), detailTest.getAttempts(), detailTest.getDate().toString());
     }
 
     @POST
     @Path("/update")
     @Consumes("application/json")
-    public Boolean update(DetailTestGWT detailTestGWT){
-        if(detailTestService.readById(detailTestGWT.getId())==null) return false;
-        DetailTest detailTest = new DetailTest(detailTestGWT.getCountPassed(), detailTestGWT.getCountFailed(), detailTestGWT.getResult());
+    @Produces("application/json")
+    public DetailTestGWT update(DetailTestGWT detailTestGWT){
+        StringTokenizer stok = new StringTokenizer(detailTestGWT.getDate(),"-");
+        DetailTest detailTest = new DetailTest(detailTestGWT.getCountPassed(), detailTestGWT.getCountFailed(), detailTestGWT.getResult(), detailTestGWT.getAttempts(), new Date(Integer.valueOf(stok.nextToken()), Integer.valueOf(stok.nextToken()), Integer.valueOf(stok.nextToken())));
         detailTest.setId(detailTestGWT.getId());
-        detailTestService.update(detailTest);
-        return true;
+        detailTest = detailTestService.update(detailTest);
+        return new DetailTestGWT(detailTest.getId(), detailTest.getCountPassed(),detailTest.getCountFailed(), detailTest.getResult(), detailTest.getAttempts(), detailTest.getDate().toString());
     }
 
     @DELETE
@@ -65,7 +71,8 @@ public class DetailTestResource {
     public Integer delete(DetailTestGWT detailTestGWT){
         DetailTest detailTest = detailTestService.readById(detailTestGWT.getId());
         if(detailTest==null) return 1;
-        detailTest = new DetailTest(detailTestGWT.getCountPassed(), detailTestGWT.getCountFailed(), detailTestGWT.getResult());
+        StringTokenizer stok = new StringTokenizer(detailTestGWT.getDate(),"-");
+        detailTest = new DetailTest(detailTestGWT.getCountPassed(), detailTestGWT.getCountFailed(), detailTestGWT.getResult(), detailTestGWT.getAttempts(), new Date(Integer.valueOf(stok.nextToken()), Integer.valueOf(stok.nextToken()), Integer.valueOf(stok.nextToken())));
         detailTest.setId(detailTestGWT.getId());
         detailTestService.delete(detailTest);
         if(detailTestService.readById(detailTestGWT.getId())!=null) return 2;

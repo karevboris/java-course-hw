@@ -17,11 +17,11 @@ public interface DetailTestClient extends RestService {
     void get(@PathParam("id") int id, MethodCallback<DetailTestGWT> callback);
 
     @POST
-    void add(DetailTestGWT detailTestGWT, MethodCallback callback);
+    void add(DetailTestGWT detailTestGWT, MethodCallback<DetailTestGWT> callback);
 
     @POST
     @Path("/update")
-    void update(DetailTestGWT detailTestGWT, MethodCallback<Boolean> callback);
+    void update(DetailTestGWT detailTestGWT, MethodCallback<DetailTestGWT> callback);
 
     @DELETE
     @Path("/{id}")

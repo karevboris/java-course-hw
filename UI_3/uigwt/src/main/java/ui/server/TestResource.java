@@ -35,19 +35,21 @@ public class TestResource {
 
     @POST
     @Consumes("application/json")
-    public void add(TestGWT test){
-        testService.add(new Test(test.getName(), test.getUserId()));
+    @Produces("application/json")
+    public TestGWT add(TestGWT testGWT){
+        Test test = testService.add(new Test(testGWT.getName(), testGWT.getUserId()));
+        return new TestGWT(test.getId(), test.getName(), test.getUserId());
     }
 
     @POST
     @Path("/update")
     @Consumes("application/json")
-    public Boolean update(TestGWT testGWT){
-        if(testService.readById(testGWT.getId())==null) return false;
+    @Produces("application/json")
+    public TestGWT update(TestGWT testGWT){
         Test test = new Test(testGWT.getName(), testGWT.getUserId());
         test.setId(testGWT.getId());
-        testService.update(test);
-        return true;
+        test = testService.update(test);
+        return new TestGWT(test.getId(), test.getName(), test.getUserId());
     }
 
     @DELETE
@@ -70,5 +72,13 @@ public class TestResource {
         testService.delete(test);
         if(testService.readById(testGWT.getId())!=null) return 2;
         return 0;
+    }
+
+    @GET
+    @Path("/getLastTest/{id}")
+    @Produces("application/json")
+    public TestGWT getLastTest(@PathParam("id") int id){
+        Test test = testService.getLastTest(id);
+        return new TestGWT(test.getId(), test.getName(), test.getUserId());
     }
 }

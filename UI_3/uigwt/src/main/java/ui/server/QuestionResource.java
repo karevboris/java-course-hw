@@ -20,7 +20,7 @@ public class QuestionResource {
     public List<QuestionGWT> getAll(){
         List<QuestionGWT> questionGWTS = new LinkedList<>();
         for(Question question:questionService.getAll()){
-            questionGWTS.add(new QuestionGWT(question.getId(),question.getText(), question.getTime(), question.getPoints(), question.getUserId()));
+            questionGWTS.add(new QuestionGWT(question.getId(),question.getText(), question.getTime(), question.getPoints()));
         }
         return questionGWTS;
     }
@@ -30,24 +30,26 @@ public class QuestionResource {
     @Produces("application/json")
     public QuestionGWT get(@PathParam("id") int id){
         Question question = questionService.readById(id);
-        return new QuestionGWT(question.getId(),question.getText(), question.getTime(), question.getPoints(), question.getUserId());
+        return new QuestionGWT(question.getId(),question.getText(), question.getTime(), question.getPoints());
     }
 
     @POST
     @Consumes("application/json")
-    public void add(QuestionGWT question){
-        questionService.add(new Question(question.getText(), question.getTime(), question.getPoints(), question.getUserId()));
+    @Produces("application/json")
+    public QuestionGWT add(QuestionGWT questionGWT){
+        Question question = questionService.add(new Question(questionGWT.getText(), questionGWT.getTime(), questionGWT.getPoints()));
+        return new QuestionGWT(question.getId(), question.getText(), question.getTime(), question.getPoints());
     }
 
     @POST
     @Path("/update")
     @Consumes("application/json")
-    public Boolean update(QuestionGWT questionGWT){
-        if(questionService.readById(questionGWT.getId())==null) return false;
-        Question question = new Question(questionGWT.getText(), questionGWT.getTime(), questionGWT.getPoints(), questionGWT.getUserId());
+    @Produces("application/json")
+    public QuestionGWT update(QuestionGWT questionGWT) {
+        Question question = new Question(questionGWT.getText(), questionGWT.getTime(), questionGWT.getPoints());
         question.setId(questionGWT.getId());
-        questionService.update(question);
-        return true;
+        question = questionService.update(question);
+        return new QuestionGWT(question.getId(), question.getText(), question.getTime(), question.getPoints());
     }
 
     @DELETE
@@ -63,11 +65,11 @@ public class QuestionResource {
     @DELETE
     @Consumes("application/json")
     public Integer delete(QuestionGWT questionGWT){
-        Question answer = questionService.readById(questionGWT.getId());
-        if(answer==null) return 1;
-        answer = new Question(questionGWT.getText(), questionGWT.getTime(), questionGWT.getPoints(), questionGWT.getUserId());
-        answer.setId(questionGWT.getId());
-        questionService.delete(answer);
+        Question question = questionService.readById(questionGWT.getId());
+        if(question==null) return 1;
+        question = new Question(questionGWT.getText(), questionGWT.getTime(), questionGWT.getPoints());
+        question.setId(questionGWT.getId());
+        questionService.delete(question);
         if(questionService.readById(questionGWT.getId())!=null) return 2;
         return 0;
     }

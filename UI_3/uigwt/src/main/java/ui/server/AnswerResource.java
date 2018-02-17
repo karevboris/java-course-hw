@@ -20,7 +20,7 @@ public class AnswerResource {
     public List<AnswerGWT> getAll(){
         List<AnswerGWT> answerClients = new LinkedList<>();
         for(Answer answer:answerService.getAll()){
-            answerClients.add(new AnswerGWT(answer.getId(),answer.getText()));
+            answerClients.add(new AnswerGWT(answer.getId(),answer.getText(), answer.getCorrect(), answer.getQuestId()));
         }
         return answerClients;
     }
@@ -30,24 +30,26 @@ public class AnswerResource {
     @Produces("application/json")
     public AnswerGWT get(@PathParam("id") int id){
         Answer answer = answerService.readById(id);
-        return new AnswerGWT(answer.getId(), answer.getText());
+        return new AnswerGWT(answer.getId(), answer.getText(), answer.getCorrect(), answer.getQuestId());
     }
 
     @POST
     @Consumes("application/json")
-    public void add(AnswerGWT answer){
-        answerService.add(new Answer(answer.getText()));
+    @Produces("application/json")
+    public AnswerGWT add(AnswerGWT answerGWT){
+        Answer answer = answerService.add(new Answer(answerGWT.getText(), answerGWT.getCorrect(), answerGWT.getQuestId()));
+        return new AnswerGWT(answer.getId(), answer.getText(), answer.getCorrect(), answer.getQuestId());
     }
 
     @POST
     @Path("/update")
     @Consumes("application/json")
-    public Boolean update(AnswerGWT answerGWT){
-        if(answerService.readById(answerGWT.getId())==null) return false;
-        Answer answer = new Answer(answerGWT.getText());
+    @Produces("application/json")
+    public AnswerGWT update(AnswerGWT answerGWT){
+        Answer answer = new Answer(answerGWT.getText(), answerGWT.getCorrect(), answerGWT.getQuestId());
         answer.setId(answerGWT.getId());
-        answerService.update(answer);
-        return true;
+        answer = answerService.update(answer);
+        return new AnswerGWT(answer.getId(), answer.getText(), answer.getCorrect(), answer.getQuestId());
     }
 
     @DELETE
@@ -65,10 +67,38 @@ public class AnswerResource {
     public Integer delete(AnswerGWT answerGWT){
         Answer answer = answerService.readById(answerGWT.getId());
         if(answer==null) return 1;
-        answer = new Answer(answerGWT.getText());
+        answer = new Answer(answerGWT.getText(), answerGWT.getCorrect(), answerGWT.getQuestId());
         answer.setId(answerGWT.getId());
         answerService.delete(answer);
         if(answerService.readById(answerGWT.getId())!=null) return 2;
         return 0;
+    }
+
+    @GET
+    @Path("/quest/{id}")
+    @Produces("application/json")
+    public List<Answer> getAnswers(@PathParam("id") int id){
+        return answerService.getAnswers(id);
+    }
+
+    @DELETE
+    @Path("/deleteAnswers/{id}")
+    public void deleteAnswers(@PathParam("id")int id){
+        answerService.deleteAnswers(id);
+    }
+
+    @GET
+    @Path("/getTestAnswers/{questionGWTList}")
+    public List<List<AnswerGWT>> getTestAnswers(@PathParam("questionGWTList") int questionGWTList){
+        List<List<AnswerGWT>> resultList = new LinkedList<>();
+        //for(Integer questionGWT:questionGWTList){
+            List<AnswerGWT> answerGWTList = new LinkedList<>();
+            List<Answer> answerList = getAnswers(questionGWTList);
+            for (Answer answer:answerList){
+                answerGWTList.add(new AnswerGWT(answer.getId(), answer.getText(), answer.getCorrect(), answer.getQuestId()));
+            }
+            resultList.add(answerGWTList);
+        //}
+        return resultList;
     }
 }

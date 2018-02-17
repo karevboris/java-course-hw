@@ -2,315 +2,486 @@ package ui.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.*;
 import org.fusesource.restygwt.client.Defaults;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
-import ui.client.Interfaces.AnswerClient;
-import ui.client.View.ErrorDialog;
-import ui.client.View.TestView;
-import ui.shared.AnswerGWT;
+import ui.client.View.ClientServices;
+import ui.client.View.Dialogs.*;
+import ui.client.View.Tables.AttemptsTable;
+import ui.client.View.Tables.TestTable;
+import ui.client.View.Tables.UserTable;
+import ui.shared.DetailTestGWT;
+import ui.shared.TestGWT;
+import ui.shared.UserGWT;
+import ui.shared.UserTestGWT;
 
-public class Client implements EntryPoint{
+import java.util.LinkedList;
+import java.util.List;
 
-    private CellTable table;
-    SimplePager pager;
-
-    /*public void refreshTable (List<Book> response){
-        ListDataProvider<Book> dataProvider = new ListDataProvider<Book>();
-
-        dataProvider.addDataDisplay(table);
-
-        List<Book> list = dataProvider.getList();
-
-        for (Book book : response) {
-            list.add(book);
-        }
-    }*/
-
+public class Client implements EntryPoint {
     public void onModuleLoad() {
         Defaults.setServiceRoot(GWT.getHostPageBaseURL());
+        ClientServices clientServices = new ClientServices();
 
-        AnswerClient answerClient = GWT.create(AnswerClient.class);
-        /*answerClient.getAnswers(new MethodCallback<List<AnswerGWT>>() {
+        clientServices.userClient.getUserByUsername(new MethodCallback<UserGWT>() {
             @Override
             public void onFailure(Method method, Throwable exception) {
-                new ErrorDialog();
+                new ErrorDialog().show();
             }
 
             @Override
-            public void onSuccess(Method method, List<AnswerGWT> response) {
-                Window.alert(response.get(0).toString());
+            public void onSuccess(Method method, UserGWT response) {
+                if(response.getAdmin()) useRoleAdmin(clientServices, response);
+                else useRoleUser(clientServices, response);
             }
+        });
+
+        /*History.addValueChangeHandler(event -> {
+            String historyToken = event.getValue();
+            if (historyToken.equals("Admin")) {
+                useRoleAdmin();
+            } else useRoleUser();
         });*/
+    }
 
-        answerClient.get(0, new MethodCallback<AnswerGWT>() {
-            @Override
-            public void onFailure(Method method, Throwable exception) {
-                new ErrorDialog().show();
-            }
+    private void useRoleAdmin(ClientServices clientServices, UserGWT response) {
+        HorizontalPanel horizontalPanel = new HorizontalPanel();
+        horizontalPanel.setVisible(true);
+        horizontalPanel.setPixelSize(RootPanel.get().getOffsetWidth(), RootPanel.get().getOffsetHeight());
+        horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
-            @Override
-            public void onSuccess(Method method, AnswerGWT response) {
-                Window.alert(response.toString());
-            }
-        });
-
-        answerClient.deleteById(1, new MethodCallback<Integer>() {
-            @Override
-            public void onFailure(Method method, Throwable exception) {
-                new ErrorDialog().show();
-            }
-
-            @Override
-            public void onSuccess(Method method, Integer response) {
-                Window.alert(response.toString());
-            }
-        });
-
-        answerClient.add(new AnswerGWT(1, "hello"), new MethodCallback() {
-            @Override
-            public void onFailure(Method method, Throwable exception) {
-                new ErrorDialog().show();
-            }
-
-            @Override
-            public void onSuccess(Method method, Object response) {
-                Window.alert("OK");
-            }
-        });
-
-        final TabPanel tabPanel = new TabPanel();
+        final TabPanel tabAdminPanel = new TabPanel();
 
         String firstPageTitle = "Tests";
         String secondPageTitle = "Users";
-        tabPanel.setWidth("400");
+        String thirdPageTitle = "Statistic";
+        String fourthPageTitle = "Sign in as user";
+        tabAdminPanel.setWidth("400");
 
-        //TestView testView = new TestView(String.valueOf(Window.getClientWidth()), String.valueOf(Window.getClientHeight()));
-        TestView testView = new TestView("100%","100%");
-        TestView testView1 = new TestView(String.valueOf(Window.getClientWidth()), String.valueOf(Window.getClientHeight()));
+        TestTable testTable = new TestTable(clientServices.userTestClient);
+        UserTable userTable = new UserTable(clientServices.userTestClient);
 
-	  /* add pages to tabPanel*/
-        tabPanel.add(testView, firstPageTitle);
-        tabPanel.add(testView1, secondPageTitle);
+        refreshUserTable(clientServices, userTable);
 
-      /* add tab selection handler */
-        tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
-            @Override
-            public void onSelection(SelectionEvent<Integer> event) {
-            /* add a token to history containing pageIndex
-             History class will change the URL of application
-             by appending the token to it.
-            */
-                History.newItem("pageIndex" + event.getSelectedItem());
-            }
+        refreshTestTable(clientServices, testTable);
+
+        HorizontalPanel forUserButton = new HorizontalPanel();
+        forUserButton.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        forUserButton.setHeight("20");
+        forUserButton.setSpacing(10);
+
+        Button newUserButton = new Button("Add new user");
+        Button deleteUserButton = new Button("Delete user");
+        Button refreshUserButton = new Button("Refresh table");
+
+        newUserButton.addClickHandler(event -> {
+            new UserAddDialog(clientServices, userTable);
         });
 
-      /* add value change handler to History
-       this method will be called, when browser's
-       Back button or Forward button are clicked
-       and URL of application changes.
-       */
-        History.addValueChangeHandler(new ValueChangeHandler<String>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<String> event) {
-                String historyToken = event.getValue();
-            /* parse the history token */
-                try {
-                    if (historyToken.substring(0, 9).equals("pageIndex")) {
-                        String tabIndexToken = historyToken.substring(9, 10);
-                        int tabIndex = Integer.parseInt(tabIndexToken);
-                  /* select the specified tab panel */
-                        tabPanel.selectTab(tabIndex);
-                    } else {
-                        tabPanel.selectTab(0);
+        deleteUserButton.addClickHandler(event -> {
+            UserGWT userGWT = userTable.getSelectionModel().getSelectedObject();
+            if (userGWT != null) {
+                clientServices.testClient.getAll(new MethodCallback<List<TestGWT>>() {
+                    @Override
+                    public void onFailure(Method method, Throwable exception) {
+
                     }
-                } catch (IndexOutOfBoundsException e) {
-                    tabPanel.selectTab(0);
-                }
-            }
-        });
-      /* select the first tab by default */
-        tabPanel.selectTab(0);
 
-      /* add controls to RootPanel */
-        RootPanel.get().add(tabPanel);
-    }
+                    @Override
+                    public void onSuccess(Method method, List<TestGWT> response) {
+                        for (TestGWT testGWT : response) {
+                            if (userGWT.getId().equals(testGWT.getUserId())) {
+                                clientServices.testClient.update(new TestGWT(testGWT.getId(), testGWT.getName(), null), new MethodCallback<TestGWT>() {
+                                    @Override
+                                    public void onFailure(Method method, Throwable exception) {
 
-        /*Defaults.setServiceRoot(GWT.getHostPageBaseURL());
+                                    }
 
-        bookClient = GWT.create(BookClient.class);
+                                    @Override
+                                    public void onSuccess(Method method, TestGWT response) {
 
-        table = new CellTable<Book>();
-
-        SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
-        pager = new SimplePager(SimplePager.TextLocation.CENTER, pagerResources, false, 0, true);
-        pager.setDisplay(table);
-        RootPanel.get().add(pager);
-
-        final SingleSelectionModel<Book> selectionModel
-                = new SingleSelectionModel<>();
-        table.setSelectionModel(selectionModel);
-        selectionModel.addSelectionChangeHandler(event -> {
-                    Book selected = selectionModel.getSelectedObject();
-                    if (selected != null) {
-                        bookClient.deleteBook(selected.getId(), new MethodCallback<List<Book>>() {
+                                    }
+                                });
+                            }
+                        }
+                        clientServices.userClient.deleteById(userGWT.getId(), new MethodCallback<Integer>() {
                             @Override
                             public void onFailure(Method method, Throwable exception) {
-                                new ErrorDialog();
+                                new ErrorDialog().show();
                             }
 
                             @Override
-                            public void onSuccess(Method method, List<Book> response) {
-                                refreshTable(response);
+                            public void onSuccess(Method method, Integer response) {
+                                new InfoDialog("User deleted");
+                                clientServices.userClient.getAll(new MethodCallback<List<UserGWT>>() {
+                                    @Override
+                                    public void onFailure(Method method, Throwable exception) {
+                                        new InfoDialog("List of users is empty");
+                                    }
+
+                                    @Override
+                                    public void onSuccess(Method method, List<UserGWT> response) {
+                                        refreshUserTable(clientServices, userTable);
+                                    }
+                                });
                             }
                         });
                     }
                 });
-
-        final Button deleteAllButton = new Button();
-        deleteAllButton.setText("Delete all books");
-        deleteAllButton.setVisible(true);
-        RootPanel.get().add(deleteAllButton);
-        deleteAllButton.addClickHandler(event -> bookClient.deleteAll(new MethodCallback<List<Book>>() {
-            @Override
-            public void onFailure(Method method, Throwable exception) {
-                new ErrorDialog();
             }
+        });
 
-            @Override
-            public void onSuccess(Method method, List<Book> response) {
-                ListDataProvider<Book> dataProvider = new ListDataProvider<Book>();
+        refreshUserButton.addClickHandler(event -> {
+            refreshUserTable(clientServices, userTable);
+        });
 
-                dataProvider.addDataDisplay(table);
+        forUserButton.add(newUserButton);
+        forUserButton.add(deleteUserButton);
+        forUserButton.add(refreshUserButton);
 
-                List<Book> list = dataProvider.getList();
+        userTable.insert(forUserButton, 0);
 
-                for (Book book : response) {
-                    list.add(book);
+        HorizontalPanel forTestButton = new HorizontalPanel();
+        forTestButton.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        forTestButton.setHeight("20");
+        forTestButton.setSpacing(10);
+
+        Button newTestButton = new Button("Add new test");
+        Button deleteTestButton = new Button("Delete test");
+        Button editTestButton = new Button("Edit test");
+        Button refreshButton = new Button("Refresh table");
+
+        forTestButton.add(newTestButton);
+        forTestButton.add(editTestButton);
+        forTestButton.add(deleteTestButton);
+        forTestButton.add(refreshButton);
+
+        refreshButton.addClickHandler(event -> {
+            refreshTestTable(clientServices, testTable);
+        });
+
+        newTestButton.addClickHandler(event -> {
+            new TestEditDialog(clientServices, new TestGWT(-1, "newTest", response.getId()), testTable, 500, 500).show();
+        });
+
+        editTestButton.addClickHandler(event -> {
+            clientServices.testClient.getAll(new MethodCallback<List<TestGWT>>() {
+                @Override
+                public void onFailure(Method method, Throwable exception) {
+                    new InfoDialog("List of tests is empty");
                 }
-            }
-        }));
 
-        final Button sendButton = new Button();
-        sendButton.setText("Add book");
-        sendButton.setVisible(true);
-        RootPanel.get().add(sendButton);
-        sendButton.addClickHandler(event -> {
-            MyDialog myDialog = new MyDialog(bookClient, table);
-            int left = Window.getClientWidth()/ 3;
-            int top = Window.getClientHeight()/ 3;
-            myDialog.setPopupPosition(left, top);
-            myDialog.show();
+                @Override
+                public void onSuccess(Method method, List<TestGWT> response) {
+                    TestGWT test = testTable.getSelectionModel().getSelectedObject();
+                    if (test != null) new TestEditDialog(clientServices, test, testTable, 700, 500).show();
+                }
+            });
+
         });
-        RootPanel.get().add(sendButton);
-        RootPanel.get().add(deleteAllButton);
 
-        AnswerInterface answerClient = GWT.create(AnswerInterface.class);
-        answerClient.getAnswer(2, new MethodCallback<AnswerClient>() {
-            @Override
-            public void onFailure(Method method, Throwable exception) {
-                new ErrorDialog();
-            }
+        deleteTestButton.addClickHandler(event -> {
+            TestGWT test = testTable.getSelectionModel().getSelectedObject();
+            if (test != null) {
+                clientServices.testClient.deleteById(test.getId(), new MethodCallback<Integer>() {
+                    @Override
+                    public void onFailure(Method method, Throwable exception) {
+                        new ErrorDialog().show();
+                    }
 
-            @Override
-            public void onSuccess(Method method, AnswerClient response) {
-                Window.alert(response.toString());
+                    @Override
+                    public void onSuccess(Method method, Integer response) {
+                        new InfoDialog("Test deleted").show();
+                        refreshTestTable(clientServices, testTable);
+                    }
+                });
             }
         });
 
-        bookClient.getLibrary(new MethodCallback<List<Book>>() {
+        testTable.insert(forTestButton, 0);
+
+        tabAdminPanel.add(testTable, firstPageTitle);
+        tabAdminPanel.add(userTable, secondPageTitle);
+        tabAdminPanel.add(new VerticalPanel(), thirdPageTitle);
+        tabAdminPanel.add(new VerticalPanel(), fourthPageTitle);
+
+        tabAdminPanel.addSelectionHandler(event -> {
+            if (event.getSelectedItem().equals(0)) History.newItem(firstPageTitle);
+            else if (event.getSelectedItem().equals(1)) History.newItem(secondPageTitle);
+            else if (event.getSelectedItem().equals(2)) History.newItem(thirdPageTitle);
+            else History.newItem(fourthPageTitle);
+        });
+
+        History.addValueChangeHandler(event -> {
+            String historyToken = event.getValue();
+            if (historyToken.equals(secondPageTitle)) {
+                tabAdminPanel.selectTab(1);
+            } else if (historyToken.equals(firstPageTitle)) {
+                tabAdminPanel.selectTab(0);
+            } else if (historyToken.equals(thirdPageTitle)) {
+                Window.Location.replace("/uigwt-1.0-SNAPSHOT/index.html");
+            } else if (historyToken.equals(fourthPageTitle)){
+                RootPanel.get().clear();
+                useRoleUser(clientServices, response);
+            }
+        });
+
+        tabAdminPanel.selectTab(0);
+        horizontalPanel.add(tabAdminPanel);
+        RootPanel.get().add(horizontalPanel);
+    }
+
+    private void useRoleUser(ClientServices clientServices, UserGWT response) {
+        HorizontalPanel horizontalPanel = new HorizontalPanel();
+        horizontalPanel.setVisible(true);
+        horizontalPanel.setPixelSize(RootPanel.get().getOffsetWidth(), RootPanel.get().getOffsetHeight());
+        horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+
+        final TabPanel tabUserPanel = new TabPanel();
+
+        AttemptsTable attemptsTable = new AttemptsTable(clientServices);
+        refreshAttemptsTable(clientServices, attemptsTable, response);
+
+        String firstPageTitle = "Testing";
+        tabUserPanel.setWidth("400");
+
+        HorizontalPanel forTestButton = new HorizontalPanel();
+        forTestButton.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        forTestButton.setHeight("20");
+        forTestButton.setSpacing(10);
+
+        Button editProfileButton = new Button("Edit profile");
+        Button newAttemptButton = new Button("Start new attempt");
+        Button refreshTableButton = new Button("Refresh table");
+        Button redirectButton = new Button("Sign in as admin");
+
+        redirectButton.addClickHandler(event -> {
+            RootPanel.get().clear();
+            useRoleAdmin(clientServices, response);
+        });
+
+        refreshTableButton.addClickHandler(event -> {
+            refreshAttemptsTable(clientServices, attemptsTable, response);
+        });
+        newAttemptButton.addClickHandler(event -> {
+            DetailTestGWT detailTestGWT = attemptsTable.getSelectionModel().getSelectedObject();
+            if (detailTestGWT != null)
+                clientServices.userTestClient.get(detailTestGWT.getId(), new MethodCallback<UserTestGWT>() {
+                    @Override
+                    public void onFailure(Method method, Throwable exception) {
+                        new ErrorDialog().show();
+                    }
+
+                    @Override
+                    public void onSuccess(Method method, UserTestGWT oldResponse) {
+                        clientServices.testQuestClient.getTestTime(oldResponse.getTestId(), new MethodCallback<Integer>() {
+                            @Override
+                            public void onFailure(Method method, Throwable exception) {
+                                new ErrorDialog().show();
+                            }
+
+                            @Override
+                            public void onSuccess(Method method, Integer time) {
+                                new TestingDialog(response, oldResponse.getTestId(), attemptsTable, detailTestGWT, time, clientServices, 700, 500).show();
+                            }
+                        });
+                    }
+                });
+        });
+        forTestButton.add(newAttemptButton);
+        forTestButton.add(refreshTableButton);
+        forTestButton.add(editProfileButton);
+        if(response.getAdmin()) forTestButton.add(redirectButton);
+
+        tabUserPanel.add(attemptsTable, firstPageTitle);
+
+        tabUserPanel.addSelectionHandler(event -> {
+            History.newItem(firstPageTitle);
+        });
+
+        History.addValueChangeHandler(event -> {
+            String historyToken = event.getValue();
+            if (historyToken.equals(firstPageTitle)) {
+                tabUserPanel.selectTab(0);
+            }
+        });
+
+        attemptsTable.insert(forTestButton, 0);
+        tabUserPanel.selectTab(0);
+        horizontalPanel.add(tabUserPanel);
+        RootPanel.get().add(horizontalPanel);
+    }
+
+    private void refreshAttemptsTable(ClientServices clientServices, AttemptsTable attemptsTable, UserGWT userGWT) {
+        clientServices.userTestClient.getTests(userGWT.getId(), new MethodCallback<List<TestGWT>>() {
             @Override
             public void onFailure(Method method, Throwable exception) {
-                new ErrorDialog();
+                new InfoDialog("List of tests is empty");
             }
 
             @Override
-            public void onSuccess(Method method, List<Book> response) {
-                TextColumn<Book> idColumn = new TextColumn<Book>() {
-                    @Override
-                    public String getValue(Book book) {
-                        return String.valueOf(book.getId());
-                    }
-                };
+            public void onSuccess(Method method, List<TestGWT> responseList) {
+                List<DetailTestGWT> list = new LinkedList<>();
+                for (TestGWT test : responseList) {
+                    clientServices.userTestClient.getUserTest(userGWT.getId(), test.getId(), new MethodCallback<UserTestGWT>() {
+                        @Override
+                        public void onFailure(Method method, Throwable exception) {
+                        }
 
-                TextColumn<Book> nameColumn = new TextColumn<Book>() {
-                    @Override
-                    public String getValue(Book book) {
-                        return book.getName();
-                    }
-                };
+                        @Override
+                        public void onSuccess(Method method, UserTestGWT response) {
+                            clientServices.detailTestClient.get(response.getId(), new MethodCallback<DetailTestGWT>() {
+                                @Override
+                                public void onFailure(Method method, Throwable exception) {
 
-                TextColumn<Book> pagesColumn = new TextColumn<Book>() {
-                    @Override
-                    public String getValue(Book book) {
-                        return String.valueOf(book.getNumPages());
-                    }
-                };
+                                }
 
-                TextColumn<Book> authorColumn = new TextColumn<Book>() {
-                    @Override
-                    public String getValue(Book book) {
-                        return book.getAuthor();
-                    }
-                };
-
-                TextColumn<Book> datePublhnColumn = new TextColumn<Book>() {
-                    @Override
-                    public String getValue(Book book) {
-                        return String.valueOf(book.getDatePublhn());
-                    }
-                };
-
-                TextColumn<Book> dateColumn = new TextColumn<Book>() {
-                    @Override
-                    public String getValue(Book book) {
-                        return book.getDate();
-                    }
-                };
-
-                table.addColumn(idColumn, createHeader("Id"));
-                table.addColumn(nameColumn, createHeader("Title"));
-                table.addColumn(pagesColumn, createHeader("Pages"));
-                table.addColumn(authorColumn, createHeader("Author"));
-                table.addColumn(datePublhnColumn, createHeader("datePublication"));
-                table.addColumn(dateColumn, createHeader("Date"));
-
-                refreshTable(response);
-
-                RootPanel.get().add(table);
+                                @Override
+                                public void onSuccess(Method method, DetailTestGWT response) {
+                                    response.setName(test.getName());
+                                    list.add(response);
+                                    if(list.size()==responseList.size())attemptsTable.refreshTable(list);
+                                }
+                            });
+                        }
+                    });
+                }
             }
         });
     }
 
-    public Header<String> createHeader(String name){
-        Header<String> columnHeader = new Header<String>(new ClickableTextCell()) {
-            @Override
-            public String getValue() {
-                return name;
-            }
-        };
-
-        columnHeader.setUpdater(value -> bookClient.sortBook(value, new MethodCallback<List<Book>>() {
+    private void refreshUserTable(ClientServices clientServices, UserTable userTable) {
+        clientServices.userClient.getAll(new MethodCallback<List<UserGWT>>() {
             @Override
             public void onFailure(Method method, Throwable exception) {
-                new ErrorDialog();
+                new InfoDialog("List of users is empty").show();
             }
 
             @Override
-            public void onSuccess(Method method, List<Book> response) {
-                refreshTable(response);
+            public void onSuccess(Method method, List<UserGWT> responseList) {
+                for (UserGWT user : responseList) {
+                    clientServices.userTestClient.getCountTests(user.getId(), new MethodCallback<Integer>() {
+                        @Override
+                        public void onFailure(Method method, Throwable exception) {
+                            user.setCount(0);
+                            clientServices.userTestClient.getCountPassedTests(user.getId(), new MethodCallback<Integer>() {
+                                @Override
+                                public void onFailure(Method method, Throwable exception) {
+
+                                    setUserDetails(clientServices, userTable, user, 0, responseList);
+                                }
+
+                                @Override
+                                public void onSuccess(Method method, Integer response) {
+
+                                    setUserDetails(clientServices, userTable, user, response, responseList);
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onSuccess(Method method, Integer response) {
+                            user.setCount(response);
+                            clientServices.userTestClient.getCountPassedTests(user.getId(), new MethodCallback<Integer>() {
+                                @Override
+                                public void onFailure(Method method, Throwable exception) {
+                                    setUserDetails(clientServices, userTable, user, 0, responseList);
+                                }
+
+                                @Override
+                                public void onSuccess(Method method, Integer response) {
+                                    setUserDetails(clientServices, userTable, user, response, responseList);
+                                }
+                            });
+                        }
+                    });
+                }
             }
-        }));
-        return columnHeader;
-    }*/
+        });
+    }
+
+    private void refreshTestTable(ClientServices clientServices, TestTable testTable) {
+        clientServices.testClient.getAll(new MethodCallback<List<TestGWT>>() {
+            @Override
+            public void onFailure(Method method, Throwable exception) {
+                new InfoDialog("List of tests is empty").show();
+            }
+
+            @Override
+            public void onSuccess(Method method, List<TestGWT> responseList) {
+                for (TestGWT test : responseList) {
+                    clientServices.userTestClient.getCountUsers(test.getId(), new MethodCallback<Integer>() {
+                        @Override
+                        public void onFailure(Method method, Throwable exception) {
+                            test.setCount(0);
+                            clientServices.userTestClient.getCountPassedUsers(test.getId(), new MethodCallback<Integer>() {
+                                @Override
+                                public void onFailure(Method method, Throwable exception) {
+                                    setTestDetails(clientServices, testTable, test, 0, responseList);
+                                }
+
+                                @Override
+                                public void onSuccess(Method method, Integer response) {
+                                    setTestDetails(clientServices, testTable, test, response, responseList);
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onSuccess(Method method, Integer response) {
+                            test.setCount(response);
+                            clientServices.userTestClient.getCountPassedUsers(test.getId(), new MethodCallback<Integer>() {
+                                @Override
+                                public void onFailure(Method method, Throwable exception) {
+                                    setTestDetails(clientServices, testTable, test, 0, responseList);
+                                }
+
+                                @Override
+                                public void onSuccess(Method method, Integer response) {
+                                    setTestDetails(clientServices, testTable, test, response, responseList);
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void setTestDetails(ClientServices clientServices, TestTable testTable, TestGWT test, Integer value, List<TestGWT> responseList) {
+        test.setPassed(value);
+        clientServices.userTestClient.getPercentPassedUsers(test.getId(), new MethodCallback<Double>() {
+            @Override
+            public void onFailure(Method method, Throwable exception) {
+                test.setPercent(0.0);
+                testTable.refreshTable(responseList);
+            }
+
+            @Override
+            public void onSuccess(Method method, Double response) {
+                test.setPercent(response);
+                testTable.refreshTable(responseList);
+            }
+        });
+    }
+
+    private void setUserDetails(ClientServices clientServices, UserTable userTable, UserGWT user, Integer value, List<UserGWT> responseList) {
+        user.setPassed(value);
+        clientServices.userTestClient.getPercentPassedTests(user.getId(), new MethodCallback<Double>() {
+            @Override
+            public void onFailure(Method method, Throwable exception) {
+                user.setPercent(0.0);
+                userTable.refreshTable(responseList);
+            }
+
+            @Override
+            public void onSuccess(Method method, Double response) {
+                user.setPercent(response);
+                userTable.refreshTable(responseList);
+            }
+        });
+    }
 }

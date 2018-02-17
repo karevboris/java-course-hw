@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xsi:schemaLocation="
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security-4.0.xsd
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
+
+    <http use-expressions="true">
+        <csrf disabled="true"/>
+        <intercept-url pattern="/#Testing" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
+        <intercept-url pattern="/#Tests" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/#Users" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/#Statistic" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/index.html" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/api/*" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
+        <intercept-url pattern="/login*" access="(isAnonymous()||isAuthenticated())" />
+        <intercept-url pattern="/**" access="isAuthenticated()"/>
+        <form-login
+                login-page="/login.jsp"
+                authentication-failure-url="/login?error=true" />
+        <logout
+                logout-success-url="/login"
+                delete-cookies="JSESSIONID" />
+    </http>
+
+    <authentication-manager>
+        <authentication-provider user-service-ref="userResource">
+            <password-encoder ref="bcryptEncoder"/>
+        </authentication-provider>
+    </authentication-manager>
+
+    <beans:bean id="userResource" class="ui.server.UserSecure"/>
+
+    <beans:bean name="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+</beans:beans>
