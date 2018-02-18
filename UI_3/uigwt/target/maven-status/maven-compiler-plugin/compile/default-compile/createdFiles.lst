@@ -23,6 +23,7 @@ ui\client\Interfaces\DetailTestClient.class
 ui\client\View\Tables\AttemptsTable$3.class
 ui\client\View\Tables\AnswerTable$2.class
 ui\client\Interfaces\UserClient.class
+ui\client\View\Tables\AttemptsTable$6.class
 ui\shared\TestQuestGWT.class
 ui\client\View\Dialogs\TestingDialog$1$1.class
 ui\client\View\Dialogs\TestEditDialog$1.class

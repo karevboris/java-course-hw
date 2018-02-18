@@ -4,6 +4,8 @@ import com.netcracker.Entities.DetailTest;
 import com.netcracker.Entities.Test;
 import com.netcracker.Entities.User;
 import com.netcracker.Entities.UserTest;
+import com.netcracker.Service.TestService.TestService;
+import com.netcracker.Service.UserService.UserService;
 import com.netcracker.Service.UserTestService.UserTestService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -17,6 +19,8 @@ import java.util.List;
 public class UserTestResource {
     private ApplicationContext context = new ClassPathXmlApplicationContext("ui/context.xml");
     private UserTestService userTestService = (UserTestService)context.getBean("userTestBean");
+    private UserService userService = (UserService)context.getBean("userBean");
+    private TestService testService = (TestService)context.getBean("testBean");
 
     @GET
     @Produces("application/json")
@@ -181,28 +185,37 @@ public class UserTestResource {
     }
 
     @GET
-    @Path("/readFromAngularForUser/{userId}")
+    @Path("/readFromAngularForUser/{username}")
     @Produces("application/json")
-    public List<UserDetail> getUserDetail(@PathParam("userId") int userId){
+    public List<UserDetail> getUserDetail(@PathParam("username") String username){
         List<UserDetail> resultList = new LinkedList<>();
-        List<TestGWT> testGWTList = getTests(userId);
+        User user = userService.readByUsername(username);
+        List<TestGWT> testGWTList = getTests(user.getId());
         for(TestGWT test:testGWTList){
-            DetailTestGWT detailTestGWT = getDetailTest(new UserTestGWT(0, userId, test.getId()));
-            UserDetail userDetail = new UserDetail(userId, test.getId(), test.getName(), detailTestGWT.getCountPassed(), detailTestGWT.getCountFailed(), detailTestGWT.getResult(), detailTestGWT.getAttempts());
+            DetailTestGWT detailTestGWT = getDetailTest(new UserTestGWT(0, user.getId(), test.getId()));
+            UserDetail userDetail = new UserDetail(user.getId(), test.getId(), test.getName(), detailTestGWT.getCountPassed(), detailTestGWT.getCountFailed(), detailTestGWT.getResult(), detailTestGWT.getAttempts(), detailTestGWT.getDate());
             resultList.add(userDetail);
         }
         return resultList;
     }
 
     @GET
-    @Path("/readFromAngularForTest/{testId}")
+    @Path("/readFromAngularForTest/{testName}")
     @Produces("application/json")
-    public List<UserDetail> getTestDetail(@PathParam("testId") int testId){
+    public List<UserDetail> getTestDetail(@PathParam("testName") String testName){
         List<UserDetail> resultList = new LinkedList<>();
+        Integer testId=-1;
+        for (Test test: testService.getAll()){
+            if(test.getName().trim().equals(testName)){
+                testId = test.getId();
+                break;
+            }
+        }
+        if(testId.equals(-1)) return resultList;
         List<UserGWT> userGWTList = getUsers(testId);
         for(UserGWT user:userGWTList){
             DetailTestGWT detailTestGWT = getDetailTest(new UserTestGWT(0, user.getId(), testId));
-            UserDetail userDetail = new UserDetail(user.getId(), testId, user.getLogin(), detailTestGWT.getCountPassed(), detailTestGWT.getCountFailed(), detailTestGWT.getResult(), detailTestGWT.getAttempts());
+            UserDetail userDetail = new UserDetail(user.getId(), testId, user.getLogin(), detailTestGWT.getCountPassed(), detailTestGWT.getCountFailed(), detailTestGWT.getResult(), detailTestGWT.getAttempts(), detailTestGWT.getDate());
             resultList.add(userDetail);
         }
         return resultList;

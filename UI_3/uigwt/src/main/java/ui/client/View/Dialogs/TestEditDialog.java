@@ -260,7 +260,7 @@ public class TestEditDialog extends DialogBox {
                         @Override
                         public void onSuccess(Method method, List<UserGWT> newResponse) {
                             for(UserGWT userGWT:newResponse){
-                                if(!userGWT.getAdmin()) userListBox.addItem(userGWT.getId()+":"+userGWT.getLogin());
+                                userListBox.addItem(userGWT.getId()+":"+userGWT.getLogin());
                             }
                         }
                     });
@@ -280,7 +280,7 @@ public class TestEditDialog extends DialogBox {
                         @Override
                         public void onSuccess(Method method, List<UserGWT> newResponse) {
                             for(UserGWT userGWT:newResponse){
-                                if(!response.contains(userGWT)&&!userGWT.getAdmin()) userListBox.addItem(userGWT.getId()+":"+userGWT.getLogin());
+                                if(!response.contains(userGWT)) userListBox.addItem(userGWT.getId()+":"+userGWT.getLogin());
                             }
                         }
                     });

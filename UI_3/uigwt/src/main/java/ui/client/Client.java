@@ -38,13 +38,6 @@ public class Client implements EntryPoint {
                 else useRoleUser(clientServices, response);
             }
         });
-
-        /*History.addValueChangeHandler(event -> {
-            String historyToken = event.getValue();
-            if (historyToken.equals("Admin")) {
-                useRoleAdmin();
-            } else useRoleUser();
-        });*/
     }
 
     private void useRoleAdmin(ClientServices clientServices, UserGWT response) {
@@ -58,7 +51,8 @@ public class Client implements EntryPoint {
         String firstPageTitle = "Tests";
         String secondPageTitle = "Users";
         String thirdPageTitle = "Statistic";
-        String fourthPageTitle = "Sign in as user";
+        String fourthPageTitle = "Log in as user";
+        String fifthPageTitle = "Log out";
         tabAdminPanel.setWidth("400");
 
         TestTable testTable = new TestTable(clientServices.userTestClient);
@@ -207,12 +201,14 @@ public class Client implements EntryPoint {
         tabAdminPanel.add(userTable, secondPageTitle);
         tabAdminPanel.add(new VerticalPanel(), thirdPageTitle);
         tabAdminPanel.add(new VerticalPanel(), fourthPageTitle);
+        tabAdminPanel.add(new VerticalPanel(), fifthPageTitle);
 
         tabAdminPanel.addSelectionHandler(event -> {
             if (event.getSelectedItem().equals(0)) History.newItem(firstPageTitle);
             else if (event.getSelectedItem().equals(1)) History.newItem(secondPageTitle);
             else if (event.getSelectedItem().equals(2)) History.newItem(thirdPageTitle);
-            else History.newItem(fourthPageTitle);
+            else if (event.getSelectedItem().equals(3)) History.newItem(fourthPageTitle);
+            else History.newItem(fifthPageTitle);
         });
 
         History.addValueChangeHandler(event -> {
@@ -226,6 +222,8 @@ public class Client implements EntryPoint {
             } else if (historyToken.equals(fourthPageTitle)){
                 RootPanel.get().clear();
                 useRoleUser(clientServices, response);
+            } else if (historyToken.equals(fifthPageTitle)){
+                Window.Location.replace("/uigwt-1.0-SNAPSHOT/logout");
             }
         });
 
@@ -246,6 +244,7 @@ public class Client implements EntryPoint {
         refreshAttemptsTable(clientServices, attemptsTable, response);
 
         String firstPageTitle = "Testing";
+        String secondPageTitle = "Log out";
         tabUserPanel.setWidth("400");
 
         HorizontalPanel forTestButton = new HorizontalPanel();
@@ -256,7 +255,7 @@ public class Client implements EntryPoint {
         Button editProfileButton = new Button("Edit profile");
         Button newAttemptButton = new Button("Start new attempt");
         Button refreshTableButton = new Button("Refresh table");
-        Button redirectButton = new Button("Sign in as admin");
+        Button redirectButton = new Button("Log in as admin");
 
         redirectButton.addClickHandler(event -> {
             RootPanel.get().clear();
@@ -297,15 +296,19 @@ public class Client implements EntryPoint {
         if(response.getAdmin()) forTestButton.add(redirectButton);
 
         tabUserPanel.add(attemptsTable, firstPageTitle);
+        tabUserPanel.add(new VerticalPanel(), secondPageTitle);
 
         tabUserPanel.addSelectionHandler(event -> {
-            History.newItem(firstPageTitle);
+            if (event.getSelectedItem().equals(0)) History.newItem(firstPageTitle);
+            else History.newItem(secondPageTitle);
         });
 
         History.addValueChangeHandler(event -> {
             String historyToken = event.getValue();
             if (historyToken.equals(firstPageTitle)) {
                 tabUserPanel.selectTab(0);
+            } else if (historyToken.equals(secondPageTitle)){
+                Window.Location.replace("/uigwt-1.0-SNAPSHOT/logout");
             }
         });
 

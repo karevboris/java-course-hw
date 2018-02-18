@@ -6,6 +6,7 @@ import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SingleSelectionModel;
@@ -24,6 +25,7 @@ public class AttemptsTable extends VerticalPanel {
     private TextColumn<DetailTestGWT> passedCountColumn;
     private TextColumn<DetailTestGWT> failedCountColumn;
     private TextColumn<DetailTestGWT> resultColumn;
+    private TextColumn<DetailTestGWT> dateColumn;
 
     public AttemptsTable(ClientServices clientServices) {
         this.clientServices = clientServices;
@@ -85,17 +87,29 @@ public class AttemptsTable extends VerticalPanel {
             }
         };
 
+        dateColumn = new TextColumn<DetailTestGWT>() {
+            @Override
+            public String getValue(DetailTestGWT detailTestGWT) {
+                setSortable(true);
+                setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+                return String.valueOf(detailTestGWT.getDate());
+            }
+        };
+
         table.addColumn(nameColumn, "Name of test");
         table.addColumn(attemptsColumn, "Number of attempts");
         table.addColumn(passedCountColumn, "Number of correct answers");
         table.addColumn(failedCountColumn, "Number of incorrect answers");
         table.addColumn(resultColumn, "Result");
+        table.addColumn(dateColumn, "Date");
 
         add(table);
         add(pager);
     }
 
     public void refreshTable (List<DetailTestGWT> testList){
+        table.setEmptyTableWidget(new Label(" No Records Found"));
+
         ListDataProvider<DetailTestGWT> dataProvider = new ListDataProvider<>();
 
         dataProvider.addDataDisplay(table);
@@ -166,7 +180,17 @@ public class AttemptsTable extends VerticalPanel {
                     return -1;
                 });
 
-
+        ColumnSortEvent.ListHandler<DetailTestGWT> columnDateSortHandler = new ColumnSortEvent.ListHandler<>(list);
+        columnDateSortHandler.setComparator(dateColumn,
+                (o1, o2) -> {
+                    if (o1.equals(o2)) {
+                        return 0;
+                    }
+                    if (o1!=null) {
+                        return (o2!=null) ? o1.getDate().compareTo(o2.getDate()) : 1;
+                    }
+                    return -1;
+                });
         table.getColumnSortList().clear();
         table.addColumnSortHandler(columnPercentColumnSortHandler);
         table.getColumnSortList().push(passedCountColumn);
@@ -182,6 +206,9 @@ public class AttemptsTable extends VerticalPanel {
         ColumnSortEvent.fire(table, table.getColumnSortList());
         table.addColumnSortHandler(columnNameSortHandler);
         table.getColumnSortList().push(nameColumn);
+        ColumnSortEvent.fire(table, table.getColumnSortList());
+        table.addColumnSortHandler(columnDateSortHandler);
+        table.getColumnSortList().push(dateColumn);
         ColumnSortEvent.fire(table, table.getColumnSortList());
     }
 

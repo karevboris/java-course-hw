@@ -6,6 +6,7 @@ import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SingleSelectionModel;
@@ -112,6 +113,8 @@ public class TestTable extends VerticalPanel {
     }
 
     public void refreshTable (List<TestGWT> testList){
+        testTable.setEmptyTableWidget(new Label(" No Records Found"));
+
         ListDataProvider<TestGWT> dataProvider = new ListDataProvider<>();
 
         dataProvider.addDataDisplay(testTable);

@@ -8,7 +8,7 @@
 <div ng-controller="myCtrl">
     <div class="row">
     <button ng-click="myFunc()">Back</button>
-    <p>Enter userId: <input type="text" ng-model = "userId"></p>
+    <p>Enter user's login: <input type="text" ng-model = "userId"></p>
     <button ng-click="findUserId()">Search</button>
 
     <p>Statistic of user:</p>
@@ -21,6 +21,7 @@
             <th>Failed</th>
             <th>Result</th>
             <th>Attempts</th>
+            <th>Date</th>
         </tr>
         <tr ng-repeat="test in detailsUser">
             <td>{{test.testid}}</td>
@@ -29,12 +30,13 @@
             <td>{{test.failed}}</td>
             <td>{{test.result}}</td>
             <td>{{test.attempts}}</td>
+            <td>{{test.date}}</td>
         </tr>
     </table>
     </div>
 
     <div class="row">
-        <p>Enter testId: <input type="text" ng-model = "testId"></p>
+        <p>Enter test's name: <input type="text" ng-model = "testId"></p>
         <button ng-click="findTestId()">Search</button>
         <p>Statistic of test:</p>
 
@@ -74,7 +76,7 @@
                     $scope.detailsUser = response.data;
                 }
                 function errorCallback(error){
-                    window.alert("Error");
+                    window.alert("User not found");
                 }
             };
 
@@ -85,10 +87,9 @@
                     $scope.detailsTest = response.data;
                 }
                 function errorCallback(error){
-                    window.alert("Error");
+                    window.alert("Test not found");
                 }
             };
-
         }]);
 </script>
 

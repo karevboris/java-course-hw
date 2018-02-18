@@ -40,7 +40,7 @@ public class DetailTestResource {
     @Produces("application/json")
     public DetailTestGWT add(DetailTestGWT detailTestGWT){
         StringTokenizer stok = new StringTokenizer(detailTestGWT.getDate(),"-");
-        DetailTest detailTest = detailTestService.add(new DetailTest(detailTestGWT.getCountPassed(), detailTestGWT.getCountFailed(), detailTestGWT.getResult(), detailTestGWT.getAttempts(), new Date(Integer.valueOf(stok.nextToken()), Integer.valueOf(stok.nextToken()), Integer.valueOf(stok.nextToken()))));
+        DetailTest detailTest = detailTestService.add(new DetailTest(detailTestGWT.getCountPassed(), detailTestGWT.getCountFailed(), detailTestGWT.getResult(), detailTestGWT.getAttempts(), new Date(Integer.valueOf(stok.nextToken())-1900, Integer.valueOf(stok.nextToken())-1, Integer.valueOf(stok.nextToken()))));
         return new DetailTestGWT(detailTest.getId(), detailTest.getCountPassed(),detailTest.getCountFailed(), detailTest.getResult(), detailTest.getAttempts(), detailTest.getDate().toString());
     }
 
@@ -50,7 +50,10 @@ public class DetailTestResource {
     @Produces("application/json")
     public DetailTestGWT update(DetailTestGWT detailTestGWT){
         StringTokenizer stok = new StringTokenizer(detailTestGWT.getDate(),"-");
-        DetailTest detailTest = new DetailTest(detailTestGWT.getCountPassed(), detailTestGWT.getCountFailed(), detailTestGWT.getResult(), detailTestGWT.getAttempts(), new Date(Integer.valueOf(stok.nextToken()), Integer.valueOf(stok.nextToken()), Integer.valueOf(stok.nextToken())));
+        int year = Integer.valueOf(stok.nextToken())-1900;
+        int month = Integer.valueOf(stok.nextToken())-1;
+        int day = Integer.valueOf(stok.nextToken());
+        DetailTest detailTest = new DetailTest(detailTestGWT.getCountPassed(), detailTestGWT.getCountFailed(), detailTestGWT.getResult(), detailTestGWT.getAttempts(), new Date(year, month, day));
         detailTest.setId(detailTestGWT.getId());
         detailTest = detailTestService.update(detailTest);
         return new DetailTestGWT(detailTest.getId(), detailTest.getCountPassed(),detailTest.getCountFailed(), detailTest.getResult(), detailTest.getAttempts(), detailTest.getDate().toString());

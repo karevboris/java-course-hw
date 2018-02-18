@@ -11,9 +11,10 @@ public class UserDetail {
     private final Integer failed;
     private final Double result;
     private final Integer attempts;
+    private final String date;
 
     @JsonCreator
-    public UserDetail(@JsonProperty("id")Integer id, @JsonProperty("testid")Integer testid, @JsonProperty("name")String name, @JsonProperty("passed")Integer passed, @JsonProperty("failed")Integer failed, @JsonProperty("result")Double result, @JsonProperty("attempts")Integer attempts) {
+    public UserDetail(@JsonProperty("id")Integer id, @JsonProperty("testid")Integer testid, @JsonProperty("name")String name, @JsonProperty("passed")Integer passed, @JsonProperty("failed")Integer failed, @JsonProperty("result")Double result, @JsonProperty("attempts")Integer attempts, @JsonProperty("date") String date) {
         this.id = id;
         this.testid = testid;
         this.name = name;
@@ -21,6 +22,7 @@ public class UserDetail {
         this.failed = failed;
         this.result = result;
         this.attempts = attempts;
+        this.date = date;
     }
 
     public Integer getId() {
@@ -49,5 +51,9 @@ public class UserDetail {
 
     public Integer getAttempts() {
         return attempts;
+    }
+
+    public String getDate() {
+        return date;
     }
 }
