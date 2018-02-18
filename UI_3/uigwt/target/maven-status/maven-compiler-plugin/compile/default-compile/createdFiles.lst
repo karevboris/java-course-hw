@@ -65,6 +65,7 @@ ui\client\Client$10.class
 ui\client\View\Dialogs\TestEditDialog$8.class
 ui\server\TestQuestResource.class
 ui\client\Client$2$2.class
+ui\client\View\Dialogs\AnswerAddDialog$2.class
 ui\client\View\Dialogs\TestEditDialog$12$1$1$1$1.class
 ui\client\Interfaces\TestQuestClient.class
 ui\client\View\Dialogs\TestEditDialog$1$1$1$1.class
@@ -90,6 +91,7 @@ ui\client\View\Dialogs\TestingDialog$1$1$1.class
 ui\client\Interfaces\AnswerClient.class
 ui\client\View\Dialogs\UserAddDialog$1$1$1.class
 ui\client\View\Dialogs\TestEditDialog$5.class
+ui\client\View\Dialogs\AnswerAddDialog$2$1.class
 ui\client\View\Dialogs\TestEditDialog$12$1$1$1$2.class
 ui\client\View\Dialogs\TestEditDialog$9$1.class
 ui\client\View\Dialogs\TestEditDialog$12$1$1$1$1$2.class

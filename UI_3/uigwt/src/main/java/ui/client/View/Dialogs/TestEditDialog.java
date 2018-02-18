@@ -322,6 +322,7 @@ public class TestEditDialog extends DialogBox {
 
                     @Override
                     public void onSuccess(Method method, List<QuestionGWT> response) {
+                        questList = response;
                         QuestionGWT question = response.get(questionsListBox.getSelectedIndex());
                         questBox.getTextBox().setText(question.getText());
                         timeBox.getTextBox().setText(question.getTime().toString());

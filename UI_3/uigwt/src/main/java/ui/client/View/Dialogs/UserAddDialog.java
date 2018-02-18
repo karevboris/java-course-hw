@@ -33,6 +33,7 @@ public class UserAddDialog extends DialogBox {
         CheckBox checkBox = new CheckBox();
         checkBox.setEnabled(true);
         horizontalPanel.add(checkBox);
+
         verticalPanel.add(login);
         verticalPanel.add(password);
         verticalPanel.add(repeatPass);
@@ -43,10 +44,12 @@ public class UserAddDialog extends DialogBox {
         Button cancelButton = new Button("Cancel");
         cancelButton.addClickHandler(event -> hide());
         okButton.addClickHandler(event -> {
-            if(login.getTextBox().getText().length()<6) new InfoDialog("Login is too short. Need more 5 characters");
-            else if (firstPass.getText().length()<6) new InfoDialog("Password is too short. Need more 5 characters");
-            else if (!firstPass.getText().equals(confPass.getText())) new InfoDialog("Passwords don't match");
-            else {
+            if (login.getTextBox().getText().length() < 6)
+                    new InfoDialog("Login is too short. Need more 5 characters");
+                else if (firstPass.getText().length() < 6)
+                    new InfoDialog("Password is too short. Need more 5 characters");
+                else if (!firstPass.getText().equals(confPass.getText())) new InfoDialog("Passwords don't match");
+                else {
                 clientServices.userClient.add(new UserGWT(0, login.getTextBox().getText(), firstPass.getText(), checkBox.getValue()), new MethodCallback<UserGWT>() {
                     @Override
                     public void onFailure(Method method, Throwable exception) {
@@ -73,7 +76,7 @@ public class UserAddDialog extends DialogBox {
 
                                     @Override
                                     public void onSuccess(Method method, List<UserGWT> responseList) {
-                                        for(UserGWT user:responseList) {
+                                        for (UserGWT user : responseList) {
                                             clientServices.userTestClient.getCountTests(user.getId(), new MethodCallback<Integer>() {
                                                 @Override
                                                 public void onFailure(Method method, Throwable exception) {

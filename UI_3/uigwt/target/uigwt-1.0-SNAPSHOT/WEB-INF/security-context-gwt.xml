@@ -20,7 +20,7 @@
         <intercept-url pattern="/**" access="isAuthenticated()"/>
         <form-login
                 login-page="/login.jsp"
-                authentication-failure-url="/403.jsp" />
+                authentication-failure-url="/login.jsp?error=true"/>
         <logout
                 logout-url="/logout"
                 logout-success-url="/login.jsp"

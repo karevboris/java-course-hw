@@ -77,7 +77,7 @@ public class Client implements EntryPoint {
 
         deleteUserButton.addClickHandler(event -> {
             UserGWT userGWT = userTable.getSelectionModel().getSelectedObject();
-            if (userGWT != null) {
+            if (userGWT != null && !userGWT.equals(response)) {
                 clientServices.testClient.getAll(new MethodCallback<List<TestGWT>>() {
                     @Override
                     public void onFailure(Method method, Throwable exception) {
@@ -252,7 +252,6 @@ public class Client implements EntryPoint {
         forTestButton.setHeight("20");
         forTestButton.setSpacing(10);
 
-        Button editProfileButton = new Button("Edit profile");
         Button newAttemptButton = new Button("Start new attempt");
         Button refreshTableButton = new Button("Refresh table");
         Button redirectButton = new Button("Log in as admin");
@@ -292,7 +291,6 @@ public class Client implements EntryPoint {
         });
         forTestButton.add(newAttemptButton);
         forTestButton.add(refreshTableButton);
-        forTestButton.add(editProfileButton);
         if(response.getAdmin()) forTestButton.add(redirectButton);
 
         tabUserPanel.add(attemptsTable, firstPageTitle);

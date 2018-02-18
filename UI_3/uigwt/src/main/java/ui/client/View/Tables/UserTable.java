@@ -126,7 +126,7 @@ public class UserTable extends VerticalPanel {
 
     public void refreshTable (List<UserGWT> userList){
         userTable.setEmptyTableWidget(new Label(" No Records Found"));
-        
+
         ListDataProvider<UserGWT> dataProvider = new ListDataProvider<>();
 
         dataProvider.addDataDisplay(userTable);

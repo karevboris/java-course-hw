@@ -32,32 +32,64 @@ public class AnswerAddDialog extends DialogBox {
         Button cancelButton = new Button("Cancel");
         cancelButton.addClickHandler(event -> hide());
         okButton.addClickHandler(event -> {
-            if(text.getTextBox().getText().length()<1) new InfoDialog("Answer is too short. Need more 1 character");
-            else {
-                clientServices.answerClient.add(new AnswerGWT(0, text.getTextBox().getText(), checkBox.getValue(), questId), new MethodCallback<AnswerGWT>() {
-                    @Override
-                    public void onFailure(Method method, Throwable exception) {
-                        new ErrorDialog().show();
-                    }
+            if(answerGWT==null) {
+                if (text.getTextBox().getText().length() < 1)
+                    new InfoDialog("Answer is too short. Need more 1 character");
+                else {
+                    clientServices.answerClient.add(new AnswerGWT(0, text.getTextBox().getText(), checkBox.getValue(), questId), new MethodCallback<AnswerGWT>() {
+                        @Override
+                        public void onFailure(Method method, Throwable exception) {
+                            new ErrorDialog().show();
+                        }
 
-                    @Override
-                    public void onSuccess(Method method, AnswerGWT response) {
-                        if(answerGWT==null) new InfoDialog("Answer added");
-                        else new InfoDialog("Answer updated");
-                        hide();
-                        clientServices.answerClient.getAnswers(questId, new MethodCallback<List<AnswerGWT>>() {
-                            @Override
-                            public void onFailure(Method method, Throwable exception) {
-                                new InfoDialog("List of answers is empty").show();
-                            }
+                        @Override
+                        public void onSuccess(Method method, AnswerGWT response) {
+                            if (answerGWT == null) new InfoDialog("Answer added");
+                            else new InfoDialog("Answer updated");
+                            hide();
+                            clientServices.answerClient.getAnswers(questId, new MethodCallback<List<AnswerGWT>>() {
+                                @Override
+                                public void onFailure(Method method, Throwable exception) {
+                                    new InfoDialog("List of answers is empty").show();
+                                }
 
-                            @Override
-                            public void onSuccess(Method method, List<AnswerGWT> response) {
-                                answerTable.refreshTable(response);
-                            }
-                        });
-                    }
-                });
+                                @Override
+                                public void onSuccess(Method method, List<AnswerGWT> response) {
+                                    answerTable.refreshTable(response);
+                                }
+                            });
+                        }
+                    });
+                }
+            } else {
+                if (text.getTextBox().getText().length() < 1)
+                    new InfoDialog("Answer is too short. Need more 1 character");
+                else {
+                    clientServices.answerClient.update(new AnswerGWT(0, text.getTextBox().getText(), checkBox.getValue(), questId), new MethodCallback<AnswerGWT>() {
+                        @Override
+                        public void onFailure(Method method, Throwable exception) {
+                            new ErrorDialog().show();
+                        }
+
+                        @Override
+                        public void onSuccess(Method method, AnswerGWT response) {
+                            if (answerGWT == null) new InfoDialog("Answer added");
+                            else new InfoDialog("Answer updated");
+                            hide();
+                            clientServices.answerClient.getAnswers(questId, new MethodCallback<List<AnswerGWT>>() {
+                                @Override
+                                public void onFailure(Method method, Throwable exception) {
+                                    new InfoDialog("List of answers is empty").show();
+                                }
+
+                                @Override
+                                public void onSuccess(Method method, List<AnswerGWT> response) {
+                                    answerTable.refreshTable(response);
+                                }
+                            });
+                        }
+                    });
+                }
             }
         });
         buttonPanel.add(okButton);
