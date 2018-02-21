@@ -4,7 +4,7 @@ import com.google.gwt.user.client.ui.*;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 import ui.client.View.ClientServices;
-import ui.client.View.Field;
+import ui.client.View.Elements.Field;
 import ui.client.View.Tables.UserTable;
 import ui.shared.UserGWT;
 

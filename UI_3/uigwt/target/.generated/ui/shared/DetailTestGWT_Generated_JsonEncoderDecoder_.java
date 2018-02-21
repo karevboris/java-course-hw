@@ -17,6 +17,7 @@ public class DetailTestGWT_Generated_JsonEncoderDecoder_ extends org.fusesource.
     isNotNullValuePut(org.fusesource.restygwt.client.AbstractJsonEncoderDecoder.INT.encode(parseValue.getAttempts()), rc, "attempts");
     isNotNullValuePut(org.fusesource.restygwt.client.AbstractJsonEncoderDecoder.STRING.encode(parseValue.getDate()), rc, "date");
     isNotNullValuePut(org.fusesource.restygwt.client.AbstractJsonEncoderDecoder.STRING.encode(parseValue.getName()), rc, "name");
+    isNotNullValuePut(org.fusesource.restygwt.client.AbstractJsonEncoderDecoder.BOOLEAN.encode(parseValue.getPassed()), rc, "passed");
     return rc;
   }
   
@@ -36,6 +37,7 @@ public class DetailTestGWT_Generated_JsonEncoderDecoder_ extends org.fusesource.
       object.get("date") == null || object.get("date") instanceof com.google.gwt.json.client.JSONNull ? null : org.fusesource.restygwt.client.AbstractJsonEncoderDecoder.STRING.decode(object.get("date"))
     );
     rc.setName(getValueToSet(org.fusesource.restygwt.client.AbstractJsonEncoderDecoder.STRING.decode(object.get("name")), null));
+    rc.setPassed(getValueToSet(org.fusesource.restygwt.client.AbstractJsonEncoderDecoder.BOOLEAN.decode(object.get("passed")), null));
     return rc;
   }
   

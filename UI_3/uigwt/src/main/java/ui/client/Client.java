@@ -158,7 +158,7 @@ public class Client implements EntryPoint {
         });
 
         newTestButton.addClickHandler(event -> {
-            new TestEditDialog(clientServices, new TestGWT(-1, "newTest", response.getId()), testTable, 500, 500).show();
+            new TestEditDialog(this, clientServices, new TestGWT(-1, "newTest", response.getId()), testTable, 500, 500).show();
         });
 
         editTestButton.addClickHandler(event -> {
@@ -171,7 +171,7 @@ public class Client implements EntryPoint {
                 @Override
                 public void onSuccess(Method method, List<TestGWT> response) {
                     TestGWT test = testTable.getSelectionModel().getSelectedObject();
-                    if (test != null) new TestEditDialog(clientServices, test, testTable, 700, 500).show();
+                    if (test != null) new TestEditDialog(Client.this, clientServices, test, testTable, 585, 500).show();
                 }
             });
 
@@ -404,7 +404,7 @@ public class Client implements EntryPoint {
         });
     }
 
-    private void refreshTestTable(ClientServices clientServices, TestTable testTable) {
+    public void refreshTestTable(ClientServices clientServices, TestTable testTable) {
         clientServices.testClient.getAll(new MethodCallback<List<TestGWT>>() {
             @Override
             public void onFailure(Method method, Throwable exception) {

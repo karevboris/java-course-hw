@@ -26,6 +26,7 @@ public class AttemptsTable extends VerticalPanel {
     private TextColumn<DetailTestGWT> failedCountColumn;
     private TextColumn<DetailTestGWT> resultColumn;
     private TextColumn<DetailTestGWT> dateColumn;
+    private TextColumn<DetailTestGWT> checkColumn;
 
     public AttemptsTable(ClientServices clientServices) {
         this.clientServices = clientServices;
@@ -96,11 +97,21 @@ public class AttemptsTable extends VerticalPanel {
             }
         };
 
+        checkColumn = new TextColumn<DetailTestGWT>() {
+            @Override
+            public String getValue(DetailTestGWT detailTestGWT) {
+                setSortable(true);
+                setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+                return detailTestGWT.getPassed()? "Passed":"Failed";
+            }
+        };
+
         table.addColumn(nameColumn, "Name of test");
         table.addColumn(attemptsColumn, "Number of attempts");
         table.addColumn(passedCountColumn, "Number of correct answers");
         table.addColumn(failedCountColumn, "Number of incorrect answers");
         table.addColumn(resultColumn, "Result");
+        table.addColumn(checkColumn, "Passing");
         table.addColumn(dateColumn, "Date");
 
         add(table);
@@ -191,6 +202,19 @@ public class AttemptsTable extends VerticalPanel {
                     }
                     return -1;
                 });
+
+        ColumnSortEvent.ListHandler<DetailTestGWT> columnCheckSortHandler = new ColumnSortEvent.ListHandler<>(list);
+        columnCheckSortHandler.setComparator(checkColumn,
+                (o1, o2) -> {
+                    if (o1.equals(o2)) {
+                        return 0;
+                    }
+                    if (o1!=null) {
+                        return (o2!=null) ? o1.getPassed().compareTo(o2.getPassed()) : 1;
+                    }
+                    return -1;
+                });
+
         table.getColumnSortList().clear();
         table.addColumnSortHandler(columnPercentColumnSortHandler);
         table.getColumnSortList().push(passedCountColumn);
@@ -209,6 +233,9 @@ public class AttemptsTable extends VerticalPanel {
         ColumnSortEvent.fire(table, table.getColumnSortList());
         table.addColumnSortHandler(columnDateSortHandler);
         table.getColumnSortList().push(dateColumn);
+        ColumnSortEvent.fire(table, table.getColumnSortList());
+        table.addColumnSortHandler(columnCheckSortHandler);
+        table.getColumnSortList().push(checkColumn);
         ColumnSortEvent.fire(table, table.getColumnSortList());
     }
 

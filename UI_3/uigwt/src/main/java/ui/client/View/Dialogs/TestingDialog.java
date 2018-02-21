@@ -5,6 +5,7 @@ import com.google.gwt.user.client.ui.*;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 import ui.client.View.ClientServices;
+import ui.client.View.Elements.QuestButtonsPanel;
 import ui.client.View.ResultAnswer;
 import ui.client.View.Tables.AttemptsTable;
 import ui.shared.*;
@@ -365,6 +366,7 @@ public class TestingDialog extends DialogBox {
                             resultAnswerList.add(resultAnswer);
                             horizontalPanel.add(answerBox);
                             questPanel.add(horizontalPanel);
+                            questPanel.add(new QuestButtonsPanel(width, tabPanel, index.size(), questionList.size()));
                             index.add(0);
                             tabPanel.add(questPanel, "Quest#" + index.size());
                             tabPanel.selectTab(0);

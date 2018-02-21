@@ -11,6 +11,7 @@ public class DetailTestGWT {
     private final Integer attempts;
     private final String date;
     private String name;
+    private Boolean passed;
 
     @JsonCreator
     public DetailTestGWT(@JsonProperty("id") Integer id, @JsonProperty("countPassed")Integer countPassed, @JsonProperty("countFailed")Integer countFailed,@JsonProperty("result") Double result, @JsonProperty("attempts") Integer attempts, @JsonProperty("date") String date) {
@@ -20,6 +21,7 @@ public class DetailTestGWT {
         this.result = result;
         this.attempts = attempts;
         this.date = date;
+        this.passed = ((double)countPassed/(countFailed+countPassed)>=0.7);
     }
 
     public Integer getId() {
@@ -54,6 +56,14 @@ public class DetailTestGWT {
         this.name = name;
     }
 
+    public Boolean getPassed() {
+        return passed;
+    }
+
+    public void setPassed(Boolean passed) {
+        this.passed = passed;
+    }
+
     @Override
     public String toString() {
         return "DetailTestGWT{" +
@@ -62,8 +72,9 @@ public class DetailTestGWT {
                 ", countFailed=" + countFailed +
                 ", result=" + result +
                 ", attempts=" + attempts +
-                ", date=" + date +
+                ", date='" + date + '\'' +
                 ", name='" + name + '\'' +
+                ", passed=" + passed +
                 '}';
     }
 }

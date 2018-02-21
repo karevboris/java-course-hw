@@ -3,14 +3,14 @@ package ui.client.View.Dialogs;
 import com.google.gwt.user.client.ui.*;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
+import ui.client.Client;
 import ui.client.View.ClientServices;
-import ui.client.View.Field;
+import ui.client.View.Elements.Field;
 import ui.client.View.Tables.AnswerTable;
 import ui.client.View.Tables.TestTable;
 import ui.shared.*;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class TestEditDialog extends DialogBox {
     private TestGWT testGWT;
@@ -18,14 +18,14 @@ public class TestEditDialog extends DialogBox {
     private ClientServices clientServices;
     private List<QuestionGWT> questList;
 
-    public TestEditDialog(ClientServices clientServices, TestGWT testGWT, TestTable testTable, int width, int height) {
+    public TestEditDialog(Client client, ClientServices clientServices, TestGWT testGWT, TestTable testTable, int width, int height) {
         setTitle("Edit Test");
         this.testGWT = testGWT;
         this.clientServices = clientServices;
-        if(testGWT.getId().equals(-1)) {
+        if (testGWT.getId().equals(-1)) {
             setTitle("Create Test");
-            getElement().setAttribute("title","Create Test");
-            setPixelSize(300,100);
+            getElement().setAttribute("title", "Create Test");
+            setPixelSize(300, 100);
             center();
             VerticalPanel panel = new VerticalPanel();
             panel.setSpacing(1);
@@ -38,7 +38,7 @@ public class TestEditDialog extends DialogBox {
             Button cancelButton = new Button("Cancel");
             cancelButton.addClickHandler(event -> hide());
             okButton.addClickHandler(event -> {
-                if(field.getTextBox().getText().isEmpty()) new InfoDialog("Incorrect name of test");
+                if (field.getTextBox().getText().isEmpty()) new InfoDialog("Incorrect name of test");
                 else {
                     clientServices.testClient.add(new TestGWT(0, field.getTextBox().getText(), testGWT.getUserId()), new MethodCallback<TestGWT>() {
                         @Override
@@ -50,111 +50,7 @@ public class TestEditDialog extends DialogBox {
                         public void onSuccess(Method method, TestGWT response) {
                             new InfoDialog("Test added");
                             hide();
-                            clientServices.testClient.getAll(new MethodCallback<List<TestGWT>>() {
-                                @Override
-                                public void onFailure(Method method, Throwable exception) {
-                                    new InfoDialog("List of tests is empty");
-                                }
-
-                                @Override
-                                public void onSuccess(Method method, List<TestGWT> response) {
-                                    clientServices.testClient.getAll(new MethodCallback<List<TestGWT>>() {
-                                        @Override
-                                        public void onFailure(Method method, Throwable exception) {
-                                            new InfoDialog("List of tests is empty").show();
-                                        }
-
-                                        @Override
-                                        public void onSuccess(Method method, List<TestGWT> responseList) {
-                                            for (TestGWT test : responseList) {
-                                                clientServices.userTestClient.getCountUsers(test.getId(), new MethodCallback<Integer>() {
-                                                    @Override
-                                                    public void onFailure(Method method, Throwable exception) {
-                                                        test.setCount(0);
-                                                        clientServices.userTestClient.getCountPassedUsers(test.getId(), new MethodCallback<Integer>() {
-                                                            @Override
-                                                            public void onFailure(Method method, Throwable exception) {
-                                                                test.setPassed(0);
-                                                                clientServices.userTestClient.getPercentPassedUsers(test.getId(), new MethodCallback<Double>() {
-                                                                    @Override
-                                                                    public void onFailure(Method method, Throwable exception) {
-                                                                        test.setPercent(0.0);
-                                                                        testTable.refreshTable(responseList);
-                                                                    }
-
-                                                                    @Override
-                                                                    public void onSuccess(Method method, Double response) {
-                                                                        test.setPercent(response);
-                                                                        testTable.refreshTable(responseList);
-                                                                    }
-                                                                });
-                                                            }
-                                                            @Override
-                                                            public void onSuccess(Method method, Integer response) {
-                                                                test.setPassed(response);
-                                                                clientServices.userTestClient.getPercentPassedUsers(test.getId(), new MethodCallback<Double>() {
-                                                                    @Override
-                                                                    public void onFailure(Method method, Throwable exception) {
-                                                                        test.setPercent(0.0);
-                                                                        testTable.refreshTable(responseList);
-                                                                    }
-
-                                                                    @Override
-                                                                    public void onSuccess(Method method, Double response) {
-                                                                        test.setPercent(response);
-                                                                        testTable.refreshTable(responseList);
-                                                                    }
-                                                                });
-                                                            }
-                                                        });
-                                                    }
-
-                                                    @Override
-                                                    public void onSuccess(Method method, Integer response) {
-                                                        test.setCount(response);
-                                                        clientServices.userTestClient.getCountPassedUsers(test.getId(), new MethodCallback<Integer>() {
-                                                            @Override
-                                                            public void onFailure(Method method, Throwable exception) {
-                                                                test.setPassed(0);
-                                                                clientServices.userTestClient.getPercentPassedUsers(test.getId(), new MethodCallback<Double>() {
-                                                                    @Override
-                                                                    public void onFailure(Method method, Throwable exception) {
-                                                                        test.setPercent(0.0);
-                                                                        testTable.refreshTable(responseList);
-                                                                    }
-
-                                                                    @Override
-                                                                    public void onSuccess(Method method, Double response) {
-                                                                        test.setPercent(response);
-                                                                        testTable.refreshTable(responseList);
-                                                                    }
-                                                                });
-                                                            }
-                                                            @Override
-                                                            public void onSuccess(Method method, Integer response) {
-                                                                test.setPassed(response);
-                                                                clientServices.userTestClient.getPercentPassedUsers(test.getId(), new MethodCallback<Double>() {
-                                                                    @Override
-                                                                    public void onFailure(Method method, Throwable exception) {
-                                                                        test.setPercent(0.0);
-                                                                        testTable.refreshTable(responseList);
-                                                                    }
-
-                                                                    @Override
-                                                                    public void onSuccess(Method method, Double response) {
-                                                                        test.setPercent(response);
-                                                                        testTable.refreshTable(responseList);
-                                                                    }
-                                                                });
-                                                            }
-                                                        });
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    });
-                                }
-                            });
+                            client.refreshTestTable(clientServices, testTable);
                         }
                     });
                 }
@@ -166,12 +62,13 @@ public class TestEditDialog extends DialogBox {
             panel.add(horizontalPanel);
             setWidget(panel);
         } else {
-            setPixelSize(width,height);
+            setPixelSize(width, height);
             horizontalPanel = new HorizontalPanel();
             horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+            horizontalPanel.setBorderWidth(1);
 
             VerticalPanel rightVerticalPanel = new VerticalPanel();
-            rightVerticalPanel.setWidth(String.valueOf(3*width/4));
+            rightVerticalPanel.setWidth(String.valueOf(3 * width / 4));
             rightVerticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
             rightVerticalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
             rightVerticalPanel.setSpacing(10);
@@ -202,12 +99,6 @@ public class TestEditDialog extends DialogBox {
             Field questBox = new Field("Question: ");
             Field timeBox = new Field("Time: ");
             Field pointsBox = new Field("Points: ");
-            HorizontalPanel boxPanel = new HorizontalPanel();
-            boxPanel.setSpacing(5);
-            boxPanel.setPixelSize(100, 50);
-            boxPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-            boxPanel.add(timeBox);
-            boxPanel.add(pointsBox);
 
             HorizontalPanel questButtonPanel = new HorizontalPanel();
             questButtonPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -227,6 +118,7 @@ public class TestEditDialog extends DialogBox {
             leftVerticalPanel.setPixelSize(width / 4, height);
             leftVerticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
             leftVerticalPanel.setSpacing(1);
+            leftVerticalPanel.setBorderWidth(0);
 
             leftVerticalPanel.add(new Label("Test name:"));
             TextArea testNameTextArea = new TextArea();
@@ -240,6 +132,8 @@ public class TestEditDialog extends DialogBox {
             ListBox userListBox = new ListBox();
             userListBox.setMultipleSelect(true);
             userListBox.setVisibleItemCount(5);
+            userListBox.setWidth("10");
+            userListBox.setPixelSize(100, 100);
 
             HorizontalPanel userRemovePanel = new HorizontalPanel();
             userRemovePanel.add(userListBox);
@@ -247,48 +141,97 @@ public class TestEditDialog extends DialogBox {
             userRemoveListBox.setMultipleSelect(true);
             userRemoveListBox.setVisibleItemCount(5);
             userRemovePanel.add(userRemoveListBox);
+            userRemoveListBox.setPixelSize(100, 100);
 
-            clientServices.userTestClient.getUsers(testGWT.getId(), new MethodCallback<List<UserGWT>>() {
-                @Override
-                public void onFailure(Method method, Throwable exception) {
-                    clientServices.userClient.getAll(new MethodCallback<List<UserGWT>>() {
+            refreshUsersList(userListBox, userRemoveListBox);
+
+            Button userAddButton = new Button("Save users");
+            userAddButton.addClickHandler(event -> {
+                List<UserGWT> addList = new LinkedList<>();
+                List<UserGWT> removeList = new LinkedList<>();
+                for (int i = 0; i < userListBox.getItemCount(); i++) {
+                    if (userListBox.isItemSelected(i)) {
+                        String line = userListBox.getItemText(i);
+                        StringBuilder res = new StringBuilder();
+                        int j = 0;
+                        while ((j < line.length()) && (line.charAt(j) != ':')) {
+                            res.append(line.charAt(j));
+                            j++;
+                        }
+                        addList.add(new UserGWT(Integer.valueOf(res.toString()), line, String.valueOf(i), false));
+                    }
+                }
+                for (UserGWT user : addList) {
+                    clientServices.userTestClient.add(new UserTestGWT(0, user.getId(), this.testGWT.getId()), new MethodCallback<UserTestGWT>() {
                         @Override
                         public void onFailure(Method method, Throwable exception) {
 
                         }
 
                         @Override
-                        public void onSuccess(Method method, List<UserGWT> newResponse) {
-                            for(UserGWT userGWT:newResponse){
-                                userListBox.addItem(userGWT.getId()+":"+userGWT.getLogin());
-                            }
+                        public void onSuccess(Method method, UserTestGWT response) {
+                            Date date = new Date();
+                            clientServices.detailTestClient.add(new DetailTestGWT(0, 0, 0, 0.0, 0, new java.sql.Date(date.getTime()).toString()), new MethodCallback<DetailTestGWT>() {
+                                @Override
+                                public void onFailure(Method method, Throwable exception) {
+
+                                }
+
+                                @Override
+                                public void onSuccess(Method method, DetailTestGWT response) {
+                                    userListBox.removeItem(Integer.valueOf(user.getPassword()));
+                                }
+                            });
                         }
                     });
                 }
 
-                @Override
-                public void onSuccess(Method method, List<UserGWT> response) {
-                    for(UserGWT userGWT:response){
-                        userRemoveListBox.addItem(userGWT.getId()+":"+userGWT.getLogin());
+                for (int i = 0; i < userRemoveListBox.getItemCount(); i++) {
+                    if (userRemoveListBox.isItemSelected(i)) {
+                        String line = userRemoveListBox.getItemText(i);
+                        StringBuilder res = new StringBuilder();
+                        int j = 0;
+                        while ((j < line.length()) && (line.charAt(j) != ':')) {
+                            res.append(line.charAt(j));
+                            j++;
+                        }
+                        removeList.add(new UserGWT(Integer.valueOf(res.toString()), line, String.valueOf(i), false));
                     }
-                    clientServices.userClient.getAll(new MethodCallback<List<UserGWT>>() {
+                }
+
+                for (UserGWT user : addList) {
+                    userRemoveListBox.addItem(user.getLogin());
+                }
+
+                for (UserGWT user : removeList) {
+                    clientServices.userTestClient.getUserTest(user.getId(), this.testGWT.getId(), new MethodCallback<UserTestGWT>() {
                         @Override
                         public void onFailure(Method method, Throwable exception) {
-
                         }
 
                         @Override
-                        public void onSuccess(Method method, List<UserGWT> newResponse) {
-                            for(UserGWT userGWT:newResponse){
-                                if(!response.contains(userGWT)) userListBox.addItem(userGWT.getId()+":"+userGWT.getLogin());
-                            }
+                        public void onSuccess(Method method, UserTestGWT response) {
+                            clientServices.userTestClient.deleteById(response.getId(), new MethodCallback<Integer>() {
+                                @Override
+                                public void onFailure(Method method, Throwable exception) {
+                                }
+
+                                @Override
+                                public void onSuccess(Method method, Integer response) {
+                                    userRemoveListBox.removeItem(Integer.valueOf(user.getPassword()));
+                                    userListBox.addItem(user.getLogin());
+                                }
+                            });
                         }
                     });
                 }
             });
 
+            idPanel.setBorderWidth(0);
+            userRemovePanel.setBorderWidth(0);
             leftVerticalPanel.add(idPanel);
             leftVerticalPanel.add(userRemovePanel);
+            leftVerticalPanel.add(userAddButton);
 
             ListBox questionsListBox = new ListBox();
             questionsListBox.setVisibleItemCount(1);
@@ -337,20 +280,22 @@ public class TestEditDialog extends DialogBox {
             addAnswerButton.addClickHandler(event -> {
                 int index = questionsListBox.getSelectedIndex();
                 new AnswerAddDialog(clientServices, answerTable, questList.get(index).getId(), null).show();
+                cleanUserTest(testGWT.getId());
             });
 
             editAnswerButton.addClickHandler(event -> {
                 int index = questionsListBox.getSelectedIndex();
                 new AnswerAddDialog(clientServices, answerTable, questList.get(index).getId(), answerTable.getSelectionModel().getSelectedObject()).show();
+                cleanUserTest(testGWT.getId());
             });
 
             saveButton.addClickHandler(event -> {
                 int index = questionsListBox.getSelectedIndex();
-                if(questBox.getTextBox().getText().length()<10) new InfoDialog("The question is too short").show();
-                else try{
+                if (questBox.getTextBox().getText().length() < 10) new InfoDialog("The question is too short").show();
+                else try {
                     Integer time = Integer.valueOf(timeBox.getTextBox().getText());
                     Double points = Double.valueOf(pointsBox.getTextBox().getText());
-                    if(time<=10||points<=0) throw new NumberFormatException();
+                    if (time < 10 || points <= 0) throw new NumberFormatException();
                     QuestionGWT questionGWT = questList.get(index);
                     clientServices.questionClient.update(new QuestionGWT(questionGWT.getId(), questBox.getTextBox().getText(), time, points), new MethodCallback<QuestionGWT>() {
                         @Override
@@ -364,26 +309,28 @@ public class TestEditDialog extends DialogBox {
                             new InfoDialog("Question updated").show();
                         }
                     });
-                } catch (NumberFormatException ex){
+                } catch (NumberFormatException ex) {
                     new InfoDialog("Incorrect data format for question").show();
                 }
             });
 
             deleteAnswerButton.addClickHandler(event -> {
                 AnswerGWT answer = answerTable.getSelectionModel().getSelectedObject();
-                if (answer!=null) clientServices.answerClient.deleteById(answer.getId(), new MethodCallback<Integer>() {
-                    @Override
-                    public void onFailure(Method method, Throwable exception) {
-                        new ErrorDialog().show();
-                    }
+                if (answer != null)
+                    clientServices.answerClient.deleteById(answer.getId(), new MethodCallback<Integer>() {
+                        @Override
+                        public void onFailure(Method method, Throwable exception) {
+                            new ErrorDialog().show();
+                        }
 
-                    @Override
-                    public void onSuccess(Method method, Integer response) {
-                        new InfoDialog("Answers deleted").show();
-                        QuestionGWT question = questList.get(questionsListBox.getSelectedIndex());
-                        refreshAnswerTable(clientServices, answerTable, question.getId());
-                    }
-                });
+                        @Override
+                        public void onSuccess(Method method, Integer response) {
+                            new InfoDialog("Answers deleted").show();
+                            cleanUserTest(testGWT.getId());
+                            QuestionGWT question = questList.get(questionsListBox.getSelectedIndex());
+                            refreshAnswerTable(clientServices, answerTable, question.getId());
+                        }
+                    });
             });
 
             Button addQuestionButton = new Button("Add question");
@@ -451,67 +398,6 @@ public class TestEditDialog extends DialogBox {
 
             Button okButton = new Button("Ok");
             okButton.addClickHandler(event -> {
-                for (int i = 0; i < userListBox.getItemCount(); i++)
-                        if (userListBox.isItemSelected(i)) {
-                            String line = userListBox.getItemText(i);
-                            StringBuilder res = new StringBuilder();
-                            int j = 0;
-                            while ((j < line.length()) && (line.charAt(j) != ':')) {
-                                res.append(line.charAt(j));
-                                j++;
-                            }
-                            clientServices.userTestClient.add(new UserTestGWT(0, Integer.valueOf(res.toString()), this.testGWT.getId()), new MethodCallback<UserTestGWT>() {
-                                @Override
-                                public void onFailure(Method method, Throwable exception) {
-
-                                }
-
-                                @Override
-                                public void onSuccess(Method method, UserTestGWT response) {
-                                    Date date = new Date();
-                                    clientServices.detailTestClient.add(new DetailTestGWT(0, 0, 0, 0.0, 0, new java.sql.Date(date.getTime()).toString()), new MethodCallback<DetailTestGWT>() {
-                                        @Override
-                                        public void onFailure(Method method, Throwable exception) {
-
-                                        }
-
-                                        @Override
-                                        public void onSuccess(Method method, DetailTestGWT response) {
-
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                for (int i = 0; i < userRemoveListBox.getItemCount(); i++)
-                        if (userRemoveListBox.isItemSelected(i)) {
-                            String line = userRemoveListBox.getItemText(i);
-                            StringBuilder res = new StringBuilder();
-                            int j = 0;
-                            while ((j < line.length()) && (line.charAt(j) != ':')) {
-                                res.append(line.charAt(j));
-                                j++;
-                            }
-                            clientServices.userTestClient.getUserTest(Integer.valueOf(res.toString()), this.testGWT.getId(), new MethodCallback<UserTestGWT>() {
-                                @Override
-                                public void onFailure(Method method, Throwable exception) {
-                                }
-
-                                @Override
-                                public void onSuccess(Method method, UserTestGWT response) {
-                                    clientServices.userTestClient.deleteById(response.getId(), new MethodCallback<Integer>() {
-                                        @Override
-                                        public void onFailure(Method method, Throwable exception) {
-                                        }
-
-                                        @Override
-                                        public void onSuccess(Method method, Integer response) {
-
-                                        }
-                                    });
-                                }
-                            });
-                        }
                 if (!TestEditDialog.this.testGWT.getName().equals(testNameTextArea.getText())) {
                     if (testNameTextArea.getText().isEmpty()) new InfoDialog("Test name is empty").show();
                     else {
@@ -526,214 +412,14 @@ public class TestEditDialog extends DialogBox {
                             public void onSuccess(Method method, TestGWT response) {
                                 new InfoDialog("Test update");
                                 hide();
-                                clientServices.testClient.getAll(new MethodCallback<List<TestGWT>>() {
-                                    @Override
-                                    public void onFailure(Method method, Throwable exception) {
-                                        new InfoDialog("List of tests is empty");
-                                    }
-
-                                    @Override
-                                    public void onSuccess(Method method, List<TestGWT> response) {
-                                        clientServices.testClient.getAll(new MethodCallback<List<TestGWT>>() {
-                                            @Override
-                                            public void onFailure(Method method, Throwable exception) {
-                                                new InfoDialog("List of tests is empty").show();
-                                            }
-
-                                            @Override
-                                            public void onSuccess(Method method, List<TestGWT> responseList) {
-                                                for (TestGWT test : responseList) {
-                                                    clientServices.userTestClient.getCountUsers(test.getId(), new MethodCallback<Integer>() {
-                                                        @Override
-                                                        public void onFailure(Method method, Throwable exception) {
-                                                            test.setCount(0);
-                                                            clientServices.userTestClient.getCountPassedUsers(test.getId(), new MethodCallback<Integer>() {
-                                                                @Override
-                                                                public void onFailure(Method method, Throwable exception) {
-                                                                    test.setPassed(0);
-                                                                    clientServices.userTestClient.getPercentPassedUsers(test.getId(), new MethodCallback<Double>() {
-                                                                        @Override
-                                                                        public void onFailure(Method method, Throwable exception) {
-                                                                            test.setPercent(0.0);
-                                                                            testTable.refreshTable(responseList);
-                                                                        }
-
-                                                                        @Override
-                                                                        public void onSuccess(Method method, Double response) {
-                                                                            test.setPercent(response);
-                                                                            testTable.refreshTable(responseList);
-                                                                        }
-                                                                    });
-                                                                }
-
-                                                                @Override
-                                                                public void onSuccess(Method method, Integer response) {
-                                                                    test.setPassed(response);
-                                                                    clientServices.userTestClient.getPercentPassedUsers(test.getId(), new MethodCallback<Double>() {
-                                                                        @Override
-                                                                        public void onFailure(Method method, Throwable exception) {
-                                                                            test.setPercent(0.0);
-                                                                            testTable.refreshTable(responseList);
-                                                                        }
-
-                                                                        @Override
-                                                                        public void onSuccess(Method method, Double response) {
-                                                                            test.setPercent(response);
-                                                                            testTable.refreshTable(responseList);
-                                                                        }
-                                                                    });
-                                                                }
-                                                            });
-                                                        }
-
-                                                        @Override
-                                                        public void onSuccess(Method method, Integer response) {
-                                                            test.setCount(response);
-                                                            clientServices.userTestClient.getCountPassedUsers(test.getId(), new MethodCallback<Integer>() {
-                                                                @Override
-                                                                public void onFailure(Method method, Throwable exception) {
-                                                                    test.setPassed(0);
-                                                                    clientServices.userTestClient.getPercentPassedUsers(test.getId(), new MethodCallback<Double>() {
-                                                                        @Override
-                                                                        public void onFailure(Method method, Throwable exception) {
-                                                                            test.setPercent(0.0);
-                                                                            testTable.refreshTable(responseList);
-                                                                        }
-
-                                                                        @Override
-                                                                        public void onSuccess(Method method, Double response) {
-                                                                            test.setPercent(response);
-                                                                            testTable.refreshTable(responseList);
-                                                                        }
-                                                                    });
-                                                                }
-
-                                                                @Override
-                                                                public void onSuccess(Method method, Integer response) {
-                                                                    test.setPassed(response);
-                                                                    clientServices.userTestClient.getPercentPassedUsers(test.getId(), new MethodCallback<Double>() {
-                                                                        @Override
-                                                                        public void onFailure(Method method, Throwable exception) {
-                                                                            test.setPercent(0.0);
-                                                                            testTable.refreshTable(responseList);
-                                                                        }
-
-                                                                        @Override
-                                                                        public void onSuccess(Method method, Double response) {
-                                                                            test.setPercent(response);
-                                                                            testTable.refreshTable(responseList);
-                                                                        }
-                                                                    });
-                                                                }
-                                                            });
-                                                        }
-                                                    });
-                                                }
-                                            }
-                                        });
-                                    }
-                                });
+                                client.refreshTestTable(clientServices, testTable);
                             }
                         });
                     }
                 } else {
                     new InfoDialog("Test update");
                     hide();
-                    clientServices.testClient.getAll(new MethodCallback<List<TestGWT>>() {
-                        @Override
-                        public void onFailure(Method method, Throwable exception) {
-                            new InfoDialog("List of tests is empty").show();
-                        }
-
-                        @Override
-                        public void onSuccess(Method method, List<TestGWT> responseList) {
-                            for (TestGWT test : responseList) {
-                                clientServices.userTestClient.getCountUsers(test.getId(), new MethodCallback<Integer>() {
-                                    @Override
-                                    public void onFailure(Method method, Throwable exception) {
-                                        test.setCount(0);
-                                        clientServices.userTestClient.getCountPassedUsers(test.getId(), new MethodCallback<Integer>() {
-                                            @Override
-                                            public void onFailure(Method method, Throwable exception) {
-                                                test.setPassed(0);
-                                                clientServices.userTestClient.getPercentPassedUsers(test.getId(), new MethodCallback<Double>() {
-                                                    @Override
-                                                    public void onFailure(Method method, Throwable exception) {
-                                                        test.setPercent(0.0);
-                                                        testTable.refreshTable(responseList);
-                                                    }
-
-                                                    @Override
-                                                    public void onSuccess(Method method, Double response) {
-                                                        test.setPercent(response);
-                                                        testTable.refreshTable(responseList);
-                                                    }
-                                                });
-                                            }
-                                            @Override
-                                            public void onSuccess(Method method, Integer response) {
-                                                test.setPassed(response);
-                                                clientServices.userTestClient.getPercentPassedUsers(test.getId(), new MethodCallback<Double>() {
-                                                    @Override
-                                                    public void onFailure(Method method, Throwable exception) {
-                                                        test.setPercent(0.0);
-                                                        testTable.refreshTable(responseList);
-                                                    }
-
-                                                    @Override
-                                                    public void onSuccess(Method method, Double response) {
-                                                        test.setPercent(response);
-                                                        testTable.refreshTable(responseList);
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onSuccess(Method method, Integer response) {
-                                        test.setCount(response);
-                                        clientServices.userTestClient.getCountPassedUsers(test.getId(), new MethodCallback<Integer>() {
-                                            @Override
-                                            public void onFailure(Method method, Throwable exception) {
-                                                test.setPassed(0);
-                                                clientServices.userTestClient.getPercentPassedUsers(test.getId(), new MethodCallback<Double>() {
-                                                    @Override
-                                                    public void onFailure(Method method, Throwable exception) {
-                                                        test.setPercent(0.0);
-                                                        testTable.refreshTable(responseList);
-                                                    }
-
-                                                    @Override
-                                                    public void onSuccess(Method method, Double response) {
-                                                        test.setPercent(response);
-                                                        testTable.refreshTable(responseList);
-                                                    }
-                                                });
-                                            }
-                                            @Override
-                                            public void onSuccess(Method method, Integer response) {
-                                                test.setPassed(response);
-                                                clientServices.userTestClient.getPercentPassedUsers(test.getId(), new MethodCallback<Double>() {
-                                                    @Override
-                                                    public void onFailure(Method method, Throwable exception) {
-                                                        test.setPercent(0.0);
-                                                        testTable.refreshTable(responseList);
-                                                    }
-
-                                                    @Override
-                                                    public void onSuccess(Method method, Double response) {
-                                                        test.setPercent(response);
-                                                        testTable.refreshTable(responseList);
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        }
-                    });
+                    client.refreshTestTable(clientServices, testTable);
                 }
             });
             leftVerticalPanel.add(okButton);
@@ -744,7 +430,8 @@ public class TestEditDialog extends DialogBox {
             rightVerticalPanel.add(new Label("Option of question"));
             rightVerticalPanel.add(questButtonPanel);
             rightVerticalPanel.add(questBox);
-            rightVerticalPanel.add(boxPanel);
+            rightVerticalPanel.add(timeBox);
+            rightVerticalPanel.add(pointsBox);
             rightVerticalPanel.add(answerTable);
 
             horizontalPanel.add(leftVerticalPanel);
@@ -754,7 +441,7 @@ public class TestEditDialog extends DialogBox {
         }
     }
 
-    public void refreshAnswerTable(ClientServices clientServices, AnswerTable answerTable, Integer questId){
+    private void refreshAnswerTable(ClientServices clientServices, AnswerTable answerTable, Integer questId){
         clientServices.answerClient.getAnswers(questId, new MethodCallback<List<AnswerGWT>>() {
             @Override
             public void onFailure(Method method, Throwable exception) {
@@ -800,6 +487,50 @@ public class TestEditDialog extends DialogBox {
                         }
                     });
                 }
+            }
+        });
+    }
+
+    private void refreshUsersList(ListBox addList, ListBox removeList){
+        addList.clear();
+        removeList.clear();
+
+        clientServices.userTestClient.getUsers(testGWT.getId(), new MethodCallback<List<UserGWT>>() {
+            @Override
+            public void onFailure(Method method, Throwable exception) {
+                clientServices.userClient.getAll(new MethodCallback<List<UserGWT>>() {
+                    @Override
+                    public void onFailure(Method method, Throwable exception) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Method method, List<UserGWT> newResponse) {
+                        for(UserGWT userGWT:newResponse){
+                            addList.addItem(userGWT.getId()+":"+userGWT.getLogin());
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onSuccess(Method method, List<UserGWT> response) {
+                for(UserGWT userGWT:response){
+                    removeList.addItem(userGWT.getId()+":"+userGWT.getLogin());
+                }
+                clientServices.userClient.getAll(new MethodCallback<List<UserGWT>>() {
+                    @Override
+                    public void onFailure(Method method, Throwable exception) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Method method, List<UserGWT> newResponse) {
+                        for(UserGWT userGWT:newResponse){
+                            if(!response.contains(userGWT)) addList.addItem(userGWT.getId()+":"+userGWT.getLogin());
+                        }
+                    }
+                });
             }
         });
     }
