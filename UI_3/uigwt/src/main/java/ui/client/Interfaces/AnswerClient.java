@@ -37,8 +37,4 @@ public interface AnswerClient extends RestService {
     @DELETE
     @Path("/deleteAnswers/{id}")
     void deleteAnswers(@PathParam("id")int id, MethodCallback callback);
-
-    @GET
-    @Path("/getTestAnswers/{questionGWTList}")
-    void getTestAnswers(@PathParam("questionGWTList") int questionGWTList, MethodCallback<List<List<AnswerGWT>>> callback);
 }

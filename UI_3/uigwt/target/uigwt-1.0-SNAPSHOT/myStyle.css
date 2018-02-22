@@ -1,7 +1,7 @@
 .row
 {
     height: 100px;
+    width: 600px;
     display: inline-block;
     top:10px;
-    width: 30%;
 }

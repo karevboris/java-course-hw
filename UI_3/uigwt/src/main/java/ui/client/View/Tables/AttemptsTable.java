@@ -2,7 +2,6 @@ package ui.client.View.Tables;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -46,7 +45,7 @@ public class AttemptsTable extends VerticalPanel {
         nameColumn = new TextColumn<DetailTestGWT>() {
             @Override
             public String getValue(DetailTestGWT detailTestGWT) {
-                setSortable(true);
+                //setSortable(true);
                 setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 return String.valueOf(detailTestGWT.getName());
             }
@@ -55,7 +54,7 @@ public class AttemptsTable extends VerticalPanel {
         attemptsColumn = new TextColumn<DetailTestGWT>() {
             @Override
             public String getValue(DetailTestGWT detailTestGWT) {
-                setSortable(true);
+                //setSortable(true);
                 setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 return String.valueOf(detailTestGWT.getAttempts());
             }
@@ -64,7 +63,7 @@ public class AttemptsTable extends VerticalPanel {
         passedCountColumn = new TextColumn<DetailTestGWT>() {
             @Override
             public String getValue(DetailTestGWT detailTestGWT) {
-                setSortable(true);
+                //setSortable(true);
                 setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 return String.valueOf(detailTestGWT.getCountPassed());
             }
@@ -73,7 +72,7 @@ public class AttemptsTable extends VerticalPanel {
         failedCountColumn = new TextColumn<DetailTestGWT>() {
             @Override
             public String getValue(DetailTestGWT detailTestGWT) {
-                setSortable(true);
+                //setSortable(true);
                 setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 return String.valueOf(detailTestGWT.getCountFailed());
             }
@@ -82,7 +81,7 @@ public class AttemptsTable extends VerticalPanel {
         resultColumn = new TextColumn<DetailTestGWT>() {
             @Override
             public String getValue(DetailTestGWT detailTestGWT) {
-                setSortable(true);
+                //setSortable(true);
                 setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 return String.valueOf(detailTestGWT.getResult());
             }
@@ -91,7 +90,7 @@ public class AttemptsTable extends VerticalPanel {
         dateColumn = new TextColumn<DetailTestGWT>() {
             @Override
             public String getValue(DetailTestGWT detailTestGWT) {
-                setSortable(true);
+                //setSortable(true);
                 setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 return String.valueOf(detailTestGWT.getDate());
             }
@@ -100,7 +99,7 @@ public class AttemptsTable extends VerticalPanel {
         checkColumn = new TextColumn<DetailTestGWT>() {
             @Override
             public String getValue(DetailTestGWT detailTestGWT) {
-                setSortable(true);
+                //setSortable(true);
                 setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 return detailTestGWT.getPassed()? "Passed":"Failed";
             }
@@ -131,7 +130,7 @@ public class AttemptsTable extends VerticalPanel {
             list.add(test);
         }
 
-        ColumnSortEvent.ListHandler<DetailTestGWT> columnNameSortHandler = new ColumnSortEvent.ListHandler<>(list);
+        /*ColumnSortEvent.ListHandler<DetailTestGWT> columnNameSortHandler = new ColumnSortEvent.ListHandler<>(list);
         columnNameSortHandler.setComparator(nameColumn,
                 (o1, o2) -> {
                     if (o1.equals(o2)) {
@@ -236,7 +235,7 @@ public class AttemptsTable extends VerticalPanel {
         ColumnSortEvent.fire(table, table.getColumnSortList());
         table.addColumnSortHandler(columnCheckSortHandler);
         table.getColumnSortList().push(checkColumn);
-        ColumnSortEvent.fire(table, table.getColumnSortList());
+        ColumnSortEvent.fire(table, table.getColumnSortList());*/
     }
 
     public CellTable<DetailTestGWT> getCellTable() {

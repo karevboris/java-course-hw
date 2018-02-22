@@ -2,7 +2,6 @@ package ui.client.View.Tables;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -45,7 +44,7 @@ public class UserTable extends VerticalPanel {
         idColumn = new TextColumn<UserGWT>() {
             @Override
             public String getValue(UserGWT user) {
-                setSortable(true);
+                //setSortable(true);
                 setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 return String.valueOf(user.getId());
             }
@@ -54,7 +53,7 @@ public class UserTable extends VerticalPanel {
         nameColumn = new TextColumn<UserGWT>() {
             @Override
             public String getValue(UserGWT user) {
-                setSortable(true);
+                //setSortable(true);
                 setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 return String.valueOf(user.getLogin());
             }
@@ -63,7 +62,7 @@ public class UserTable extends VerticalPanel {
         adminColumn = new TextColumn<UserGWT>() {
             @Override
             public String getValue(UserGWT user) {
-                setSortable(true);
+                //setSortable(true);
                 setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 return user.getAdmin()? "Admin":"User";
             }
@@ -72,7 +71,7 @@ public class UserTable extends VerticalPanel {
         countTestColumn = new TextColumn<UserGWT>() {
             @Override
             public String getValue(UserGWT user) {
-                setSortable(true);
+                //setSortable(true);
                 setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 return String.valueOf(user.getCount());
             }
@@ -81,7 +80,7 @@ public class UserTable extends VerticalPanel {
         countPassedTestColumn = new TextColumn<UserGWT>() {
             @Override
             public String getValue(UserGWT user) {
-                setSortable(true);
+                //setSortable(true);
                 setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 return String.valueOf(user.getPassed());
             }
@@ -90,7 +89,7 @@ public class UserTable extends VerticalPanel {
         percentPassedTestColumn = new TextColumn<UserGWT>() {
             @Override
             public String getValue(UserGWT user) {
-                setSortable(true);
+                //setSortable(true);
                 setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 if(user.getPercent().isNaN()) return "0%";
                 return String.valueOf(user.getPercent())+'%';
@@ -137,7 +136,7 @@ public class UserTable extends VerticalPanel {
             list.add(user);
         }
 
-        ColumnSortEvent.ListHandler<UserGWT> columnSortHandler = new ColumnSortEvent.ListHandler<>(list);
+        /*ColumnSortEvent.ListHandler<UserGWT> columnSortHandler = new ColumnSortEvent.ListHandler<>(list);
         columnSortHandler.setComparator(idColumn,
                 (o1, o2) -> {
                     if (o1.equals(o2)) {
@@ -229,6 +228,6 @@ public class UserTable extends VerticalPanel {
         ColumnSortEvent.fire(userTable, userTable.getColumnSortList());
         userTable.addColumnSortHandler(columnSortHandler);
         userTable.getColumnSortList().push(idColumn);
-        ColumnSortEvent.fire(userTable, userTable.getColumnSortList());
+        ColumnSortEvent.fire(userTable, userTable.getColumnSortList());*/
     }
 }

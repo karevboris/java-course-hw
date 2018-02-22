@@ -174,28 +174,6 @@ public class AnswerClient_Generated_RestServiceProxy_ implements ui.client.Inter
       callback.onFailure(__method,__e);
     }
   }
-  public void getTestAnswers(int questionGWTList, org.fusesource.restygwt.client.MethodCallback<java.util.List<java.util.List<ui.shared.AnswerGWT>>> callback) {
-    final int final_questionGWTList = questionGWTList;
-    final org.fusesource.restygwt.client.Method __method =
-    getResource()
-    .resolve("/getTestAnswers/"+(""+questionGWTList== null? null : com.google.gwt.http.client.URL.encodePathSegment(""+questionGWTList))+"")
-    .get();
-    __method.setDispatcher(this.dispatcher);
-    __method.header(org.fusesource.restygwt.client.Resource.HEADER_ACCEPT, org.fusesource.restygwt.client.Resource.CONTENT_TYPE_JSON);
-    try {
-      __method.send(new org.fusesource.restygwt.client.AbstractRequestCallback<java.util.List<java.util.List<ui.shared.AnswerGWT>>>(__method, callback) {
-        protected java.util.List<java.util.List<ui.shared.AnswerGWT>> parseResult() throws Exception {
-          try {
-            return org.fusesource.restygwt.client.AbstractJsonEncoderDecoder.toList(com.google.gwt.json.client.JSONParser.parse(__method.getResponse().getText()), org.fusesource.restygwt.client.AbstractNestedJsonEncoderDecoder.listEncoderDecoder( ui.shared.AnswerGWT_Generated_JsonEncoderDecoder_.INSTANCE ));
-          } catch (Throwable __e) {
-            throw new org.fusesource.restygwt.client.ResponseFormatException("Response was NOT a valid JSON document", __e);
-          }
-        }
-      });
-    } catch (com.google.gwt.http.client.RequestException __e) {
-      callback.onFailure(__method,__e);
-    }
-  }
   public void update(ui.shared.AnswerGWT answerGWT, org.fusesource.restygwt.client.MethodCallback<ui.shared.AnswerGWT> callback) {
     final ui.shared.AnswerGWT final_answerGWT = answerGWT;
     final org.fusesource.restygwt.client.Method __method =

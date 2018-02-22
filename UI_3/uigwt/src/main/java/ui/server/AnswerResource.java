@@ -11,7 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Path("answer")
-public class AnswerResource {
+public class
+AnswerResource {
     private ApplicationContext context = new ClassPathXmlApplicationContext("ui/context.xml");
     private AnswerService answerService = (AnswerService)context.getBean("answerBean");
 
@@ -77,28 +78,17 @@ public class AnswerResource {
     @GET
     @Path("/quest/{id}")
     @Produces("application/json")
-    public List<Answer> getAnswers(@PathParam("id") int id){
-        return answerService.getAnswers(id);
+    public List<AnswerGWT> getAnswers(@PathParam("id") int id){
+        List<AnswerGWT> answerClients = new LinkedList<>();
+        for(Answer answer:answerService.getAnswers(id)){
+            answerClients.add(new AnswerGWT(answer.getId(),answer.getText(), answer.getCorrect(), answer.getQuestId()));
+        }
+        return answerClients;
     }
 
     @DELETE
     @Path("/deleteAnswers/{id}")
     public void deleteAnswers(@PathParam("id")int id){
         answerService.deleteAnswers(id);
-    }
-
-    @GET
-    @Path("/getTestAnswers/{questionGWTList}")
-    public List<List<AnswerGWT>> getTestAnswers(@PathParam("questionGWTList") int questionGWTList){
-        List<List<AnswerGWT>> resultList = new LinkedList<>();
-        //for(Integer questionGWT:questionGWTList){
-            List<AnswerGWT> answerGWTList = new LinkedList<>();
-            List<Answer> answerList = getAnswers(questionGWTList);
-            for (Answer answer:answerList){
-                answerGWTList.add(new AnswerGWT(answer.getId(), answer.getText(), answer.getCorrect(), answer.getQuestId()));
-            }
-            resultList.add(answerGWTList);
-        //}
-        return resultList;
     }
 }

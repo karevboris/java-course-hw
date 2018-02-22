@@ -2,7 +2,6 @@ package ui.client.View.Tables;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -43,7 +42,7 @@ public class TestTable extends VerticalPanel {
         idColumn = new TextColumn<TestGWT>() {
             @Override
             public String getValue(TestGWT testClient) {
-                setSortable(true);
+                //setSortable(true);
                 setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 return String.valueOf(testClient.getId());
             }
@@ -52,7 +51,7 @@ public class TestTable extends VerticalPanel {
         nameColumn = new TextColumn<TestGWT>() {
             @Override
             public String getValue(TestGWT testClient) {
-                setSortable(true);
+                //setSortable(true);
                 setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 return testClient.getName();
             }
@@ -61,7 +60,7 @@ public class TestTable extends VerticalPanel {
         userNumColumn = new TextColumn<TestGWT>() {
             @Override
             public String getValue(TestGWT test) {
-                setSortable(true);
+                //setSortable(true);
                 setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 return String.valueOf(test.getCount());
             }
@@ -70,7 +69,7 @@ public class TestTable extends VerticalPanel {
         tryNumColumn = new TextColumn<TestGWT>() {
             @Override
             public String getValue(TestGWT test) {
-                setSortable(true);
+                //setSortable(true);
                 setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 return String.valueOf(test.getPassed());
             }
@@ -79,7 +78,7 @@ public class TestTable extends VerticalPanel {
         passedNumColumn = new TextColumn<TestGWT>() {
             @Override
             public String getValue(TestGWT test) {
-                setSortable(true);
+                //setSortable(true);
                 setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 if(test.getPercent().isNaN()) return "0%";
                 return String.valueOf(test.getPercent())+'%';
@@ -127,7 +126,7 @@ public class TestTable extends VerticalPanel {
             list.add(test);
         }
 
-        dataProvider.flush();
+        /*dataProvider.flush();
         dataProvider.refresh();
 
         ColumnSortEvent.ListHandler<TestGWT> columnSortHandler = new ColumnSortEvent.ListHandler<>(list);
@@ -209,6 +208,6 @@ public class TestTable extends VerticalPanel {
         testTable.getColumnSortList().clear();
         testTable.addColumnSortHandler(columnSortHandler);
         testTable.getColumnSortList().push(idColumn);
-        ColumnSortEvent.fire(testTable, testTable.getColumnSortList());
+        ColumnSortEvent.fire(testTable, testTable.getColumnSortList());*/
     }
 }
